@@ -39,6 +39,8 @@
 
 - [ ] Step 6. ACL - access control layer (Roles and permission)
 
+- [ ] Step 8. Mailhog and mail sending (SharedAccess should be activated only if it was accepted though an email)
+
 - [ ] Step 7. To be discussed
 
 ### Stuff I would like to learn
