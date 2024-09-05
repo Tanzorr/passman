@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('passowrds', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('vault_id')->constrained()->cascadeOnDelete();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('password');
             $table->timestamps();
         });
     }
