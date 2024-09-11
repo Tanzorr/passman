@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Passowrd;
+use App\Models\Password;
 use Illuminate\Http\Request;
 
-class PassowrdController extends Controller
+
+class PasswordController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +35,7 @@ class PassowrdController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Passowrd $passowrd)
+    public function show(Password $passowrd)
     {
         //
     }
@@ -42,7 +43,7 @@ class PassowrdController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Passowrd $passowrd)
+    public function edit(Password $passowrd)
     {
         //
     }
@@ -50,7 +51,7 @@ class PassowrdController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Passowrd $passowrd)
+    public function update(Request $request, Password $passowrd)
     {
         //
     }
@@ -58,7 +59,7 @@ class PassowrdController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Passowrd $passowrd)
+    public function destroy(Password $passowrd)
     {
         //
     }

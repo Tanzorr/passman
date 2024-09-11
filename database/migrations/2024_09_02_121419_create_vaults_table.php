@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('vaults', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->references('id')->on('users');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->boolean('is_shared')->default(false);
             $table->timestamps();
         });
     }

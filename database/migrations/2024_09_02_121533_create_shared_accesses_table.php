@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shared_accesses', function (Blueprint $table) {
             $table->id();
-            $table->morphs('shareable');
+            $table->morphs('shared');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('access_level')->nullable();
             $table->timestamp('expires_at')->nullable();
