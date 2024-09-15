@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SharedAccess;
+use Database\Factories\SharedAccess;
 use Illuminate\Http\Request;
 
 class SharedAccessController extends Controller
