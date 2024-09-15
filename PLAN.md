@@ -1,3 +1,8 @@
+#### Goal and deadline (to be defined)
+Ex: 
+  Release a working MVP till the end of the year on a cloud platform.
+
+
 ### Tools
 - [ ] psalm - static analysis (NPR, dead code, type mismatch,...)
 - [ ] php-cs-fixer - formatting
