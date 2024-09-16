@@ -5,7 +5,7 @@ Ex:
 
 ### Tools
 - [ ] psalm - static analysis (NPR, dead code, type mismatch,...)
-- [ ] php-cs-fixer - formatting
+- [+ ] php-cs-fixer - formatting
 - [ ] phpmd - code complexity, code smell 
 - [ ] 1 simple test on PHPUnit
 
@@ -16,11 +16,11 @@ Ex:
 
 ### Action
 - [ ] Step 1. Entities, migrations  **1 branch, each point is a commit**
-    - [ ] Create User
-    - [ ] Create Vault
-    - [ ] Create Password
-    - [ ] Create SharedAccess (polymorph relation to password or vault, can have time based limit or count based limit)
-    - [ ] Create a Pull Request and sync
+    - [+ ] Create User
+    - [+ ] Create Vault
+    - [+ ] Create Password
+    - [ +] Create SharedAccess (polymorph relation to password or vault, can have time based limit or count based limit)
+    - [ +] Create a Pull Request and sync
 
 - [ ] Step 2. Configuration of API for User.
     - [ ] list (with pagination)
