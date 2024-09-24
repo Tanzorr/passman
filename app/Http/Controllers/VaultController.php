@@ -2,64 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetVaultsAction;
+use App\Http\Requests\StoreVaultRequest;
+use App\Http\Requests\UpdateVaultRequest;
 use App\Models\Vault;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class VaultController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(GetVaultsAction $getVaultsAction): JsonResponse
     {
-        //
+        return $getVaultsAction->handle(request()->get('search'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreVaultRequest $request): JsonResponse
     {
-        //
+        Vault::create($request->validated());
+
+        return response()->json(['message' => 'Vault created successfully'], 201);
+    }
+    public function show(Vault $vault): JsonResponse
+    {
+        $vault->load(['passwords', 'sharedAccess', 'accessedUsers']);
+
+        return response()->json($vault);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update(UpdateVaultRequest $request, Vault $vault): JsonResponse
     {
-        //
+        $vault->where('id', $request->validated()['id'])->update($request->validated());
+
+        return response()->json(['message' => 'Vault updated successfully']);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Vault $vault)
+    public function destroy(Vault $vault): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Vault $vault)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Vault $vault)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Vault $vault)
-    {
-        //
+        return response()->json(null, $vault->delete() ? 200 : 404);
     }
 }

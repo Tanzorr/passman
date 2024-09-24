@@ -2,64 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use Database\Factories\SharedAccess;
+use App\Actions\StoreSharedAccessAction;
+use App\Actions\UpdateSharedAccessAction;
+use App\Http\Requests\StoreSharedAccessRequest;
+use App\Models\SharedAccess;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SharedAccessController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        return response()->json(SharedAccess::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreSharedAccessRequest $request, StoreSharedAccessAction $sharedAccessAction): JsonResponse
     {
-        //
+        return $sharedAccessAction->handle($request);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update(Request $request, string $id, UpdateSharedAccessAction $sharedAccessAction): JsonResponse
     {
-        //
+        return $sharedAccessAction->handle($request, $id);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(SharedAccess $sharedAccess)
+    public function destroy(string $id): JsonResponse
     {
-        //
-    }
+        SharedAccess::destroy($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(SharedAccess $sharedAccess)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, SharedAccess $sharedAccess)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(SharedAccess $sharedAccess)
-    {
-        //
+        return response()->json(null, 200);
     }
 }

@@ -2,65 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePasswordRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Models\Password;
-use Illuminate\Http\Request;
-
+use App\Models\Vault;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
+use Knuckles\Scribe\Attributes\Endpoint;
 
 class PasswordController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Vault $vault): Collection
     {
-        //
+        return Password::where('vault_id', $vault->id)->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StorePasswordRequest $request): JsonResponse
     {
-        //
+        Password::create($request->validated());
+
+        return response()->json(['message' => 'Password created successfully']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Password $password): Password
     {
-        //
+        return $password;
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Password $passowrd)
+    public function update(UpdatePasswordRequest $request, Password $password): JsonResponse
     {
-        //
+        $password->update($request->validated());
+
+        return response()->json($password);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Password $passowrd)
+    public function destroy(Password $password): JsonResponse
     {
-        //
-    }
+        $password->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Password $passowrd)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Password $passowrd)
-    {
-        //
+        return response()->json(['message' => 'Password deleted successfully']);
     }
 }

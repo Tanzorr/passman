@@ -2,23 +2,21 @@
 
 namespace App\Models;
 
-use Database\Factories\SharedAccess;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-/**
- *
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Password newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Password newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Password query()
- * @mixin \Eloquent
- */
 class Password extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'vault_id',
+        'name',
+        'value',
+        'description',
+    ];
 
     public function sharedAccess(): MorphMany
     {

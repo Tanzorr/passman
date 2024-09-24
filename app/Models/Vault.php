@@ -2,38 +2,35 @@
 
 namespace App\Models;
 
-use Database\Factories\SharedAccess;
+use App\Scopes\UserVaultScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-/**
- *
- *
- * @property int $id
- * @property int $user_id
- * @property string $name
- * @property string|null $description
- * @property int $is_shared
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Vault newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Vault newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Vault query()
- * @method static \Illuminate\Database\Eloquent\Builder|Vault whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Vault whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Vault whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Vault whereIsShared($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Vault whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Vault whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Vault whereUserId($value)
- * @mixin \Eloquent
- */
 class Vault extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'name',
+        'description',
+        'is_shared',
+    ];
+
+    public function scopeFilterBySearch(Builder $query, $search = ''): Builder
+    {
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        }
+
+        return $query;
+    }
 
     public function passwords(): HasMany
     {
@@ -45,8 +42,20 @@ class Vault extends Model
         return $this->morphMany(SharedAccess::class, 'accessible');
     }
 
+    public function accessedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'shared_accesses', 'accessible_id', 'user_id')
+            ->where('accessible_type', SharedAccess::VAULT_TYPE)
+            ->select(['users.*', 'shared_accesses.id as shared_access_id']);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserVaultScope);
     }
 }

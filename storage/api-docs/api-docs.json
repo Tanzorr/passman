@@ -1,0 +1,254 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Pass Manager API",
+        "description": "Документация API для Pass Manager",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/passwords": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "List all non-admin users",
+                "operationId": "5e82e0753f0734f5a63ac3c393c0a2c4",
+                "responses": {
+                    "200": {
+                        "description": "passwords retrieved success"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "summary": "Display a listing of the resource",
+                "operationId": "c457726701591d1183b53aa71fc13441",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Store a newly created resource in storage",
+                "operationId": "592819a0265360b2014512d6dbfaf0e7",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "John Doe"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    {
+                                        "properties": {
+                                            "email": {
+                                                "type": "string",
+                                                "example": "example@gmail.com"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    {
+                                        "properties": {
+                                            "password": {
+                                                "type": "string",
+                                                "example": "password"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created successfully"
+                    }
+                }
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "summary": "Display the specified resource",
+                "operationId": "36a33ff774d5cba33c039dec2c3e0287",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update the specified resource in storage",
+                "operationId": "b9091397c8b25f12c6adb74be6ce3a5a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove the specified resource from storage",
+                "operationId": "fa56cffde745d3f152f95cbacd936c0b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/vaults": {
+            "get": {
+                "summary": "Display a listing of the resource",
+                "operationId": "3eb78925e5459e4b5ed698512a45207b",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Store a newly created resource in storage",
+                "operationId": "c9851be49dc9ae0571cb7f394eac8866",
+                "requestBody": {
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Vault created successfully"
+                    }
+                }
+            }
+        },
+        "/vaults/{id}": {
+            "get": {
+                "summary": "Display the specified resource",
+                "operationId": "da6c5953d4f1238428d6826434dd1a76",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update the specified resource in storage",
+                "operationId": "e368e321ee19ac969403ce4d2dce0cee",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vault updated successfully"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove the specified resource from storage",
+                "operationId": "5d221ffd1c42193197e856c6278fc76d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vault deleted successfully"
+                    },
+                    "404": {
+                        "description": "Vault not found"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Admin",
+            "description": "Admin"
+        }
+    ]
+}
