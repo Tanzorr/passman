@@ -37,5 +37,4 @@ class StoreUserRequest extends FormRequest
 
         return $rules;
     }
-
 }
