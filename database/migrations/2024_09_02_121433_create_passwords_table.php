@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('passwords', function (Blueprint $table) {
             $table->id();
-            $table->foreign('vault_id')->references('id')->on('vaults');
+            $table->foreignId('vault_id');
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('value');

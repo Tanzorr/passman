@@ -12,15 +12,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-
+        return response()->json(User::paginate());
     }
 
     /**
@@ -34,6 +26,8 @@ class UserController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
+        // use User::create($validatedData) instead and move bcrypt hashing to User creating event
+        // @see https://laravel.com/docs/11.x/eloquent#events
         $user = new User();
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
@@ -42,6 +36,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'User created successfully!',
+            // use 'data' => $user instead, so it can be compatible with other requests too
             'user' => $user
         ], 201);
 
@@ -52,15 +47,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return User::findOrFail($id);
     }
 
     /**
@@ -76,6 +63,10 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if(User::destroy($id)){
+            return response(null, 200);
+        }
+
+        return response(null, 404);
     }
 }

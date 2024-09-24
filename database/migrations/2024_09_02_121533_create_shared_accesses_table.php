@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('shared_accesses', function (Blueprint $table) {
             $table->id();
             $table->morphs('accessible');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('user_id');
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
