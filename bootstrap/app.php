@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(CorsMiddleware::class);
         //$middleware->append(\App\Http\Middleware\VerifyCsrfToken::class);
+        $middleware->validateCsrfTokens(except: [
+            '*',
+            'http://localhost:4200/api/*',
+            'http://localhost:4200/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
