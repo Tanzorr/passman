@@ -61,7 +61,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id):ResponseFactory
+    public function destroy(string $id)
     {
         if(User::destroy($id)){
             return response(null, 200);

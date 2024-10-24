@@ -15,18 +15,18 @@ Ex:
     - [ ] Migrations
 
 ### Action
-- [ ] Step 1. Entities, migrations  **1 branch, each point is a commit**
-    - [+ ] Create User
-    - [+ ] Create Vault
-    - [+ ] Create Password
-    - [ +] Create SharedAccess (polymorph relation to password or vault, can have time based limit or count based limit)
-    - [ +] Create a Pull Request and sync
+- [+] Step 1. Entities, migrations  **1 branch, each point is a commit**
+    - [+] Create User
+    - [+] Create Vault
+    - [+] Create Password
+    - [+] Create SharedAccess (polymorph relation to password or vault, can have time based limit or count based limit)
+    - [+] Create a Pull Request and sync
 
 - [ ] Step 2. Configuration of API for User.
-    - [ ] list (with pagination)
-    - [ ] get
-    - [ ] post (create)
-    - [ ] put (update) (put requires full payload, patch can go with partial payload)
+    - [+] list (with pagination)
+    - [+] get
+    - [+] post (create)
+    - [+] put (update) (put requires full payload, patch can go with partial payload)
 
 - [ ] Step 3. Configure Vault and Password API.
     - One vault **hasMany** passwords
