@@ -20,6 +20,13 @@ class Password extends Model
 {
     use HasFactory;
 
+    protected $fillible = [
+        'vault_id',
+        'name',
+        'value',
+        'description',
+    ];
+
     public function sharedAccess(): MorphMany
     {
         return $this->morphMany(SharedAccess::class, 'accessible');

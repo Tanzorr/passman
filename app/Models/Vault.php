@@ -35,6 +35,13 @@ class Vault extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'name',
+        'description',
+        'is_shared',
+    ];
+
     public function passwords(): HasMany
     {
         return $this->hasMany(Password::class);
