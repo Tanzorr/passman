@@ -8,17 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Carbon;
 
 /**
- *
- *
  * @property int $id
  * @property int $user_id
  * @property string $name
  * @property string|null $description
  * @property int $is_shared
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Vault newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Vault newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Vault query()
@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Vault whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Vault whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Vault whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Vault extends Model

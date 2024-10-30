@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -24,11 +25,7 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
-        ]);
+        $user = User::create($validatedData);
 
         return response()->json(['message' => 'User created successfully', 'user' => $user]);
     }
@@ -44,14 +41,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreUserRequest $request, string $id):RedirectResponse
+    public function update(UpdateUserRequest $request, string $id): RedirectResponse
     {
         $validatedData = $request->validated();
 
-        User::where('id', $id)->update([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-        ]);
+        User::where('id', $id)->update($validatedData);
 
         return redirect()->back()->with('success', 'User updated successfully!');
     }
@@ -59,9 +53,9 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id):mixed
+    public function destroy(string $id): mixed
     {
-        if(User::destroy($id)){
+        if (User::destroy($id)) {
             return response(null, 200);
         }
 

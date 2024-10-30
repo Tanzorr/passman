@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CorsMiddleware;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,7 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(CorsMiddleware::class);
-        //$middleware->append(\App\Http\Middleware\VerifyCsrfToken::class);
         $middleware->validateCsrfTokens(except: [
             '*',
             'http://localhost:4200/api/*',

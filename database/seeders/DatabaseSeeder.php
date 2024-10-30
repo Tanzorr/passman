@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Password;
 use App\Models\User;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Vault;
 use Illuminate\Database\Seeder;
 

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVaultRequest;
+use App\Http\Requests\UpdateVaultRequest;
 use App\Models\Vault;
-
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 
 class VaultController extends Controller
 {
@@ -18,33 +19,13 @@ class VaultController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required',
-            'name' => 'required',
-            'description' => 'nullable',
-        ]);
-
-        Vault::create($request->all());
-
-        return response()->json(['message' => 'Vault created successfully'], 201);
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreVaultRequest $request): \Illuminate\Http\JsonResponse
     {
-        $request->validate([
-            'user_id' => 'required',
-            'name' => 'required | string | min:2 | max:255 | unique:vaults',
-            'description' => 'nullable',
-        ]);
+        $validatedData = $request->validated();
 
-        Vault::create($request->all());
+        Vault::create($validatedData);
 
         return response()->json(['message' => 'Vault created successfully'], 201);
     }
@@ -52,32 +33,21 @@ class VaultController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Vault $vault): Vault
+    public function show(Vault $vault): \Illuminate\Http\JsonResponse
     {
-        return $vault;
-    }
+        $vault->load('passwords');
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Vault $vault)
-    {
-        //
+        return response()->json($vault);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Vault $vault)
+    public function update(UpdateVaultRequest $request, Vault $vault): \Illuminate\Http\JsonResponse
     {
-        $request->validate([
-            'id' => 'required',
-            'user_id' => 'required',
-            'name' => 'required',
-            'description' => 'nullable',
-        ]);
+        $validatedData = $request->validated();
 
-        Vault::where('id', $request->id)->update($request->all());
+        $vault->where('id', $validatedData['id'])->update($validatedData);
 
         return response()->json(['message' => 'Vault updated successfully']);
     }
@@ -85,9 +55,9 @@ class VaultController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Vault $vault)
+    public function destroy(Vault $vault): ResponseFactory
     {
-        if($vault->delete()){
+        if ($vault->delete()) {
             return response(null, 200);
         }
 

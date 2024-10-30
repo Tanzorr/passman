@@ -2,54 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePasswordRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Models\Password;
+use App\Models\Vault;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-
 
 class PasswordController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Vault $vault): \Illuminate\Database\Eloquent\Collection
     {
-        return Password::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request):JsonResponse
-    {
-        $request->validate([
-            'vault_id' => 'required',
-            'name' => 'required',
-            'value' => 'required',
-            'description' => 'nullable',
-        ]);
-
-        Password::create($request->all());
-
-        return response()->json(['message' => 'Password created successfully'], 201);
+        return Password::where('vault_id', $vault->id)->get();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePasswordRequest $request): JsonResponse
     {
-        $request->validate([
-            'id' => 'required',
-            'vault_id' => 'required',
-            'name' => 'required',
-            'value' => 'required',
-            'description' => 'nullable',
-        ]);
+        $validatedData = $request->validated();
 
-        Password::wehere('id', $request->id)->update($request->all());
+        Password::create($validatedData);
 
-        return response()->json(['message' => 'Password updated successfully']);
+        return response()->json(['message' => 'Password create successfully']);
     }
 
     /**
@@ -61,19 +39,15 @@ class PasswordController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Password $password)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Password $password)
+    public function update(UpdatePasswordRequest $request, Password $password): JsonResponse
     {
-        //
+        $validatedData = $request->validated();
+
+        $password->where($validatedData['id'] === 'id')->update($validatedData);
+
+        return response()->json(['message' => 'Password updated successfully']);
     }
 
     /**

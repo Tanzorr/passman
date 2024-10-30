@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Session\TokenMismatchException;
+use Symfony\Component\HttpFoundation\Response;
 
 class VerifyCsrfToken
 {
@@ -15,10 +15,9 @@ class VerifyCsrfToken
     /**
      * Handle an incoming request.
      *
-     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
-     * @throws TokenMismatchException
+     * @param  Closure(Request): (Response)  $next
+     *
      */
-
     public function handle($request, Closure $next)
     {
         // Пропустити запити для GET, HEAD, OPTIONS
@@ -27,15 +26,10 @@ class VerifyCsrfToken
             return $next($request);
         }
 
-//        // Перевірка CSRF токена
-//        if ($request->session()->token() !== $request->input('_token') && $request->session()->token() !== $request->header('X-CSRF-TOKEN')) {
-//            throw new TokenMismatchException;
-//        }
-
         return $next($request);
     }
 
-    protected function inExceptArray(Request $request)
+    protected function inExceptArray(Request $request): bool
     {
         foreach ($this->except as $except) {
             if ($request->is($except)) {
@@ -51,7 +45,7 @@ class VerifyCsrfToken
         return in_array($request->method(), ['HEAD', 'OPTIONS']);
     }
 
-    protected function runningUnitTests()
+    protected function runningUnitTests(): bool
     {
         return app()->runningUnitTests();
     }

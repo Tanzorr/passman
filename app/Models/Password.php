@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Database\Factories\SharedAccess;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,18 +10,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
- *
- *
  * @method static \Illuminate\Database\Eloquent\Builder|Password newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Password newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Password query()
- * @mixin \Eloquent
+ *
+ * @mixin Eloquent
  */
 class Password extends Model
 {
     use HasFactory;
 
-    protected $fillible = [
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
         'vault_id',
         'name',
         'value',
