@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Password;
 use App\Models\User;
 
 use App\Models\Vault;
@@ -20,5 +19,7 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $user->id,
             ]);
         });
+
+        $this->call(PasswordSeeder::class);
     }
 }
