@@ -24,7 +24,7 @@ class UpdateVaultRequest extends FormRequest
     {
         return [
             'id' => 'required',
-            'user_id' => 'required | exists:users, id',
+            'user_id' => 'required',
             'name' => 'required',
             'description' => 'nullable',
         ];

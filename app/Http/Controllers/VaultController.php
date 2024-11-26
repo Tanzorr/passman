@@ -14,7 +14,7 @@ class VaultController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(Vault::orderBy('created_at', 'desc')->paginate());
+        return response()->json(Vault::orderBy('created_at')->paginate());
     }
 
     /**

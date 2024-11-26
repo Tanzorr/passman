@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePasswordRequest extends FormRequest
 {
@@ -23,10 +24,30 @@ class StorePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vault_id' => 'required | exists:vaults,id',
-            'name' => 'required | string | min:2 | max:255 | unique:passwords',
-            'value' => 'required',
-            'description' => 'nullable',
+            'vault_id' => [
+                'required',
+                'integer',
+                'exists:vaults,id',
+            ],
+            'name' => [
+                'required',
+                'string',
+                'min:2',
+                'max:255',
+                Rule::unique('passwords')->where(function ($query) {
+                    return $query->where('vault_id', $this->vault_id);
+                }),
+            ],
+            'value' => [
+                'required',
+                'string',
+                'min:4',
+            ],
+            'description' => [
+                'nullable', // Поле не є обов'язковим.
+                'string', // Якщо передане, воно повинно бути рядком.
+                'max:1000', // Максимальна довжина (за бажанням).
+            ],
         ];
     }
 }
