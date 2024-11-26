@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(User::paginate());
+        return response()->json(User::orderBy('created_at', 'desc')->paginate());
     }
 
     /**
@@ -33,9 +33,11 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user): JsonResponse
     {
-        return User::findOrFail($id);
+        $user->load('vaults');
+
+        return response()->json($user);
     }
 
     /**

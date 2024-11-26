@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreVaultRequest;
 use App\Http\Requests\UpdateVaultRequest;
 use App\Models\Vault;
-use http\Env\Response;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 
 class VaultController extends Controller
@@ -17,13 +14,13 @@ class VaultController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(Vault::paginate());
+        return response()->json(Vault::orderBy('created_at', 'desc')->paginate());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreVaultRequest $request): \Illuminate\Http\JsonResponse
+    public function store(StoreVaultRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
@@ -57,7 +54,7 @@ class VaultController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Vault $vault): ResponseFactory
+    public function destroy(Vault $vault)
     {
         if ($vault->delete()) {
             return response(null, 200);

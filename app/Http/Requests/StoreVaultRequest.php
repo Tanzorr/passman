@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+namespace App\Http\Requests;
+
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,7 +25,7 @@ class StoreVaultRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required | exist:users,id',
+            'user_id' => 'required | exists:users,id',
             'name' => 'required | unique:vaults',
             'description' => 'nullable',
         ];
