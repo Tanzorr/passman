@@ -10,7 +10,14 @@ use Illuminate\Http\JsonResponse;
 class VaultController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/vaults",
+     *     summary="Display a listing of the resource",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *     )
+     * )
      */
     public function index(): JsonResponse
     {
@@ -20,12 +27,21 @@ class VaultController extends Controller
             ->orderBy('created_at')
             ->paginate(18);
 
-
         return response()->json($vaults);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/vaults",
+     *     summary="Store a newly created resource in storage",
+     *     @OA\RequestBody(
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Vault created successfully",
+     *     )
+     * )
      */
     public function store(StoreVaultRequest $request): JsonResponse
     {
@@ -37,9 +53,22 @@ class VaultController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/vaults/{id}",
+     *     summary="Display the specified resource",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *     )
+     * )
      */
-    public function show(Vault $vault): \Illuminate\Http\JsonResponse
+    public function show(Vault $vault): JsonResponse
     {
         $vault->load('passwords');
 
@@ -47,9 +76,25 @@ class VaultController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/vaults/{id}",
+     *     summary="Update the specified resource in storage",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Vault updated successfully",
+     *     )
+     * )
      */
-    public function update(UpdateVaultRequest $request, Vault $vault): \Illuminate\Http\JsonResponse
+    public function update(UpdateVaultRequest $request, Vault $vault): JsonResponse
     {
         $validatedData = $request->validated();
 
@@ -59,9 +104,26 @@ class VaultController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/vaults/{id}",
+     *     summary="Remove the specified resource from storage",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Vault deleted successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Vault not found"
+     *     )
+     * )
      */
-    public function destroy(Vault $vault)
+    public function destroy(Vault $vault): JsonResponse
     {
         if ($vault->delete()) {
             return response(null, 200);

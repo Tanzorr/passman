@@ -19,8 +19,9 @@ class UserController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/users",
+     *     path="/api/users",
      *     summary="Display a listing of the resource",
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation"
@@ -40,11 +41,37 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/users",
+     *     path="/api/users",
      *     summary="Store a newly created resource in storage",
+     *
      *     @OA\RequestBody(
-     *         required=true
+     *         @OA\JsonContent(
+     *             allOf={
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string",
+     *                         example="John Doe"
+     *                     )
+     *                 ),
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="email",
+     *                         type="string",
+     *                         example="example@gmail.com"
+     *                     )
+     *                 ),
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="password",
+     *                         type="string",
+     *                         example="password"
+     *                     )
+     *                 )
+     *             }
+     *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=201,
      *         description="User created successfully"
@@ -62,14 +89,17 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/users/{id}",
+     *     path="/api/users/{id}",
      *     summary="Display the specified resource",
+     *
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
+     *
      *         @OA\Schema(type="integer")
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation"
@@ -85,17 +115,21 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/users/{id}",
+     *     path="/api/users/{id}",
      *     summary="Update the specified resource in storage",
+     *
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
+     *
      *         @OA\Schema(type="integer")
      *     ),
+     *
      *     @OA\RequestBody(
      *         required=true
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="User updated successfully"
@@ -113,14 +147,17 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/users/{id}",
+     *     path="/api/users/{id}",
      *     summary="Remove the specified resource from storage",
+     *
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
+     *
      *         @OA\Schema(type="integer")
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="User deleted successfully"

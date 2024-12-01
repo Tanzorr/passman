@@ -4,8 +4,8 @@ Ex:
 
 
 ### Tools
-- [ ] psalm - static analysis (NPR, dead code, type mismatch,...)
-- [+ ] php-cs-fixer - formatting
+- [+] psalm - static analysis (NPR, dead code, type mismatch,...)
+- [+] php-cs-fixer - formatting
 - [ ] phpmd - code complexity, code smell 
 - [ ] 1 simple test on PHPUnit
 
@@ -28,7 +28,7 @@ Ex:
     - [+] post (create)
     - [+] put (update) (put requires full payload, patch can go with partial payload)
 
-- [ ] Step 3. Configure Vault and Password API.
+- [+] Step 3. Configure Vault and Password API.
     - One vault **hasMany** passwords
     - One password **belongsToOne** vault
     - User hasMany vaults
