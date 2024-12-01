@@ -39,15 +39,41 @@ Ex:
     - User hasMany SharedAccess (as guest)
     - SharedAccess hasMany Vaults (host can give access to many vaults to one or more guests)
     - Vault belongsToMany SharedAcesses (vault can be shared multiple times)
+    - [ ] add global scopes for vaults and passwords
+        ```
+            # in middlewhere if(!user->Admin) {...add global scope}
+            # OR Vault::boot()
+            Vault::addGlobalScope(...) # where user_id=X
+            Vault::addGlobalScope('scopeByOwnership')# where user_id=X
+
+            Vault::all() # SELECT * from vaults where user_id = X
+            Vault::find(5) # null
+        ```
+    - [ ] polymorphic relation to vault OR password
+    https://laravel.com/docs/11.x/eloquent-relationships#custom-polymorphic-types
+    ```
+    access{
+        host: User,
+        guest: User,
+        accessible: Morph<Password|Vault> # accessible_id, accessible_type -> password/vault
+        exprirationDate: ?DateTime
+    }
+    ```
  
 - [ ] Step 5. Auth, JWT, Rate limmit, IP based access
 
 - [ ] Step 6. ACL - access control layer (Roles and permission)
+    - [ ] Scopes: https://laravel.com/docs/11.x/eloquent#query-scopes
 
 - [ ] Step 7. Mailhog and mail sending (SharedAccess should be activated only if it was accepted though an email)
 
-- [ ] Step 8. To be discussed
+- [ ] Step 8. Infrastructure
+    - [ ] Github CI/CD
+    - [ ] Deployment to AWS
+    - [ ] infrastructure with terraform
 
+- [ ] Step 8. To be discussed
+    - [ ] Push notifications
 ### Stuff I would like to learn
  - [ ] Configre CI/CD on github (on PR run tests, code quality check)
  - [ ] configure xdebuger with docker
