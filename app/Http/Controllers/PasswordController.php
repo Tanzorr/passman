@@ -45,9 +45,11 @@ class PasswordController extends Controller
     {
         $validatedData = $request->validated();
 
-        $password->where($validatedData['id'] === 'id')->update($validatedData);
+        $password->update($validatedData);
 
-        return response()->json(['message' => 'Password updated successfully']);
+        $newPassword = Password::find($password->id);
+
+        return response()->json($newPassword);
     }
 
     /**

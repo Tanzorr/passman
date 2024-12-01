@@ -25,7 +25,7 @@ class UpdatePasswordRequest extends FormRequest
         return [
             'id' => 'required',
             'vault_id' => 'required | exists:vaults,id',
-            'name' => 'required | string | min:2 | max:255 | unique:passwords',
+            'name' => 'required | string | min:2 | max:255',
             'value' => 'required',
             'description' => 'nullable',
         ];

@@ -11,12 +11,12 @@ Route::prefix('api')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::middleware(RoleMiddleware::class.':admin')->group(function () {
         });
+        Route::apiResource('passwords', PasswordController::class);
 
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     });
 
     // Public routes
-    Route::apiResource('passwords', PasswordController::class);
     Route::apiResource('vaults', VaultController::class);
     Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::apiResource('users', UserController::class);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -62,6 +63,25 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * Scope for filtering vaults by a search query.
+     *
+     * @param Builder $query
+     * @param string|null $search
+     * @return Builder
+     */
+    public function scopeFilterBySearch(Builder $query, ?string $search): Builder
+    {
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        return $query;
+    }
 
     /**
      * Get the attributes that should be cast.

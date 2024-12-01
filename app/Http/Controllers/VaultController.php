@@ -14,7 +14,14 @@ class VaultController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(Vault::orderBy('created_at')->paginate());
+        $search = request()->get('search');
+
+        $vaults = Vault::filterBySearch($search)
+            ->orderBy('created_at')
+            ->paginate(18);
+
+
+        return response()->json($vaults);
     }
 
     /**
