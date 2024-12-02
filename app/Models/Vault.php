@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\UserVaultScope;
 use Database\Factories\SharedAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -77,5 +78,10 @@ class Vault extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserVaultScope);
     }
 }

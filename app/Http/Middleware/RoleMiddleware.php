@@ -18,10 +18,13 @@ class RoleMiddleware
     {
         $user = Auth::user();
 
+        var_dump($user);
+        exit();
+
         if (Auth::check() && $user['role'] == $role) {
             return $next($request);
         }
 
-        return response()->json(['message' => 'Unauthorized hi'], 401);
+        return response()->json(['message' => 'Unauthorized'], 401);
     }
 }
