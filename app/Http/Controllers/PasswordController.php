@@ -7,12 +7,11 @@ use App\Http\Requests\UpdatePasswordRequest;
 use App\Models\Password;
 use App\Models\Vault;
 use Illuminate\Http\JsonResponse;
+use Knuckles\Scribe\Attributes\Endpoint;
 
+#[Endpoint('passwords', 'Password Resource')]
 class PasswordController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Vault $vault): \Illuminate\Database\Eloquent\Collection
     {
         return Password::where('vault_id', $vault->id)->get();

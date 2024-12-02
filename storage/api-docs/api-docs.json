@@ -6,6 +6,34 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/passwords": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "List all non-admin users",
+                "operationId": "5e82e0753f0734f5a63ac3c393c0a2c4",
+                "responses": {
+                    "200": {
+                        "description": "passwords retrieved success"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/users": {
             "get": {
                 "summary": "Display a listing of the resource",
@@ -216,5 +244,11 @@
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Admin",
+            "description": "Admin"
+        }
+    ]
 }
