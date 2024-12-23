@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -12,7 +11,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return true; // Ви можете додати логіку авторизації тут
     }
 
     /**
@@ -26,6 +25,22 @@ class UpdateUserRequest extends FormRequest
             'name' => ['required', 'string', 'min:2'],
             'password' => ['nullable', 'min:6', 'confirmed'],
             'email' => ['required', 'email'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            // Додаткові поля можна валідувати таким чином
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages()
+    {
+        return [
+            'image.image' => 'Файл має бути зображенням.',
+            'image.mimes' => 'Допустимі формати зображень: jpeg, png, jpg, gif, svg.',
+            'image.max' => 'Максимальний розмір зображення: 2 MB.',
         ];
     }
 }

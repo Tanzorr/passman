@@ -19,6 +19,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image',
     ];
 
     protected $hidden = [
@@ -26,7 +27,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $appends = ['ownVaults', 'sharedVaults'];
+    protected $appends = ['ownVaults'];
 
     public function scopeFilterBySearch(Builder $query, $search = ''): Builder
     {
@@ -66,7 +67,7 @@ class User extends Authenticatable
             ]);
     }
 
-    public function getOwnVaultsAttribute()
+    public function getOwnVaultsAttribute(): \Illuminate\Database\Eloquent\Collection
     {
         return $this->vaults()->get();
     }

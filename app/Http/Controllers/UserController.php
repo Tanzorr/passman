@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Actions\GetUsersAction;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\SharedAccess;
 use App\Models\User;
 use App\Services\SharedAccessService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -21,8 +22,18 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request): JsonResponse
     {
-        $user = User::create($request->validated());
-        return response()->json(['message' => 'User created successfully', 'user' => $user]);
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('user_images');
+        }
+
+        $user = User::create($validated);
+
+        $path = $request->file('image')->store('user_images');
+
+        return response()->json(['message' => 'User created successfully', 'user' => $user,
+            'image_path' => $path]);
     }
 
     public function show(User $user): JsonResponse
@@ -30,16 +41,38 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function update(UpdateUserRequest $request, string $id): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
         $user = User::findOrFail($id);
-        $user->update($request->validated());
+
+        dd($request->all());
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'min:2'],
+            'email' => ['required', 'email'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+        ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $path = $file->store('uploads', 'public'); // Зберігаємо у папці `storage/app/public/uploads`
+            $validated['image'] = $path;  // Додаємо шлях до файлу в масив валідації
+        }
+
+        $user->update($validated);
+
         return response()->json(['message' => 'User updated successfully', 'user' => $user]);
     }
 
     public function destroy(string $id): JsonResponse
     {
-        return User::destroy($id) ? response()->json(null, 200) : response()->json(null, 404);
+        $user = User::findOrFail($id);
+
+        if ($user->image) {
+            Storage::delete($user->image);
+        }
+
+        return $user->delete() ? response()->json(null, 200) : response()->json(null, 404);
     }
 
     public function getNotAccessedUsers(string $entityType, string $entityId): JsonResponse
