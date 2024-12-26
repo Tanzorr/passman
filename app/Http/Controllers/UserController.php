@@ -7,13 +7,14 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\SharedAccess;
 use App\Models\User;
+use App\Services\ImageUploadService;
 use App\Services\SharedAccessService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function __construct(private SharedAccessService $sharedAccessService)
+    public function __construct(private SharedAccessService $sharedAccessService, private ImageUploadService $imageUploadService)
     {
     }
 
@@ -49,18 +50,9 @@ class UserController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('image')) {
-            if ($user->image && Storage::disk('public')->exists($user->image)) {
-                Storage::disk('public')->delete($user->image);
-            }
+            $imageUrl = $this->imageUploadService->upload($request->file('image'));
 
-            $file = $request->file('image');
-            $fileName = $file->getClientOriginalName();
-            $path = $file->storeAs('uploads', $fileName, 'public');
-            $appUrl = config('app.url');
-
-            $fileUrl = $appUrl.'/storage/'.$path;
-
-            $validated['image'] = $fileUrl;
+            $validated['image'] = $imageUrl;
         }
 
         $user->update($validated);
