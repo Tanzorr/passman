@@ -8,8 +8,6 @@ class StoreSharedAccessRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -19,14 +17,12 @@ class StoreSharedAccessRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
         return [
-            'accessible_type' => 'required|string', // Add other models as needed
-            'accessible_id' => 'required|integer|exists:vaults,id', // Replace `vaults` with the appropriate table
+            'accessible_type' => 'required|string',
+            'accessible_id' => 'required|integer|exists:vaults,id',
             'user_id' => 'required|integer|exists:users,id',
             'expires_at' => 'nullable|date|after_or_equal:now',
         ];
@@ -34,8 +30,6 @@ class StoreSharedAccessRequest extends FormRequest
 
     /**
      * Custom error messages.
-     *
-     * @return array
      */
     public function messages(): array
     {

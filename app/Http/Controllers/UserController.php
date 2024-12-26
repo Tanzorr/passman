@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Actions\GetUsersAction;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\SharedAccess;
 use App\Models\User;
 use App\Services\SharedAccessService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function __construct(private SharedAccessService $sharedAccessService) {}
+    public function __construct(private SharedAccessService $sharedAccessService)
+    {
+    }
 
     public function index(GetUsersAction $getUsersAction): JsonResponse
     {
@@ -41,27 +43,32 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function update(Request $request, string $id): JsonResponse
+    public function update(UpdateUserRequest $request, string $id): JsonResponse
     {
         $user = User::findOrFail($id);
-
-        dd($request->all());
-
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'min:2'],
-            'email' => ['required', 'email'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('image')) {
+            if ($user->image && Storage::disk('public')->exists($user->image)) {
+                Storage::disk('public')->delete($user->image);
+            }
+
             $file = $request->file('image');
-            $path = $file->store('uploads', 'public'); // Зберігаємо у папці `storage/app/public/uploads`
-            $validated['image'] = $path;  // Додаємо шлях до файлу в масив валідації
+            $fileName = $file->getClientOriginalName();
+            $path = $file->storeAs('uploads', $fileName, 'public');
+            $appUrl = config('app.url');
+
+            $fileUrl = $appUrl.'/storage/'.$path;
+
+            $validated['image'] = $fileUrl;
         }
 
         $user->update($validated);
 
-        return response()->json(['message' => 'User updated successfully', 'user' => $user]);
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $user,
+        ]);
     }
 
     public function destroy(string $id): JsonResponse

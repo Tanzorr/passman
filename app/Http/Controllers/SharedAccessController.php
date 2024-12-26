@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\StoreSharedAccessAction;
 use App\Actions\UpdateSharedAccessAction;
 use App\Http\Requests\StoreSharedAccessRequest;
+use App\Http\Requests\UpdateSacrednessRequest;
 use App\Models\SharedAccess;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class SharedAccessController extends Controller
         return $sharedAccessAction->handle($request);
     }
 
-    public function update(Request $request, string $id, UpdateSharedAccessAction $sharedAccessAction): JsonResponse
+    public function update(UpdateSacrednessRequest $request, string $id, UpdateSharedAccessAction $sharedAccessAction): JsonResponse
     {
         return $sharedAccessAction->handle($request, $id);
     }
