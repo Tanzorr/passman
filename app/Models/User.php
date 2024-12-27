@@ -76,4 +76,9 @@ class User extends Authenticatable
     {
         return $this->sharedVaultsRelation()->get();
     }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'entity');
+    }
 }

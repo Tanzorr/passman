@@ -10,12 +10,13 @@ use App\Models\User;
 use App\Services\ImageUploadService;
 use App\Services\SharedAccessService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function __construct(private SharedAccessService $sharedAccessService, private ImageUploadService $imageUploadService)
-    {
+    public function __construct(
+        private SharedAccessService $sharedAccessService,
+        private ImageUploadService $imageUploadService
+    ) {
     }
 
     public function index(GetUsersAction $getUsersAction): JsonResponse
@@ -28,15 +29,15 @@ class UserController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('user_images');
+            $validated['image'] = $this->imageUploadService->upload($request->file('image'));
         }
 
         $user = User::create($validated);
 
-        $path = $request->file('image')->store('user_images');
-
-        return response()->json(['message' => 'User created successfully', 'user' => $user,
-            'image_path' => $path]);
+        return response()->json([
+            'message' => 'User created successfully',
+            'user' => $user,
+        ]);
     }
 
     public function show(User $user): JsonResponse
@@ -50,9 +51,13 @@ class UserController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('image')) {
-            $imageUrl = $this->imageUploadService->upload($request->file('image'));
+            $imagePath = $this->imageUploadService->upload(
+                $request->file('image'),
+                'user',
+                $user->id
+            );
 
-            $validated['image'] = $imageUrl;
+            $validated['image'] = $imagePath;
         }
 
         $user->update($validated);
@@ -68,7 +73,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         if ($user->image) {
-            Storage::delete($user->image);
+            $this->imageUploadService->delete($user->image);
         }
 
         return $user->delete() ? response()->json(null, 200) : response()->json(null, 404);
