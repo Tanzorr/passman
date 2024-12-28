@@ -15,6 +15,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const type = 'user';
+
     protected $fillable = [
         'name',
         'email',

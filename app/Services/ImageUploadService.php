@@ -10,42 +10,47 @@ class ImageUploadService
 {
     public function upload(UploadedFile $file, string $entityType, int $entityId): string
     {
-        $fileHash = hash_file('sha256', $file->getRealPath());
-
-        $existingImage = Image::where('hash', $fileHash)->first();
         $currentImage = Image::where('entity_id', $entityId)->where('entity_type', $entityType)->first();
-        if ($existingImage) {
-            return $existingImage->path;
-        }
-
         if ($currentImage) {
-            $currentImageUsed = Image::where('name', $currentImage->name)->first();
+            $currentImageUsed = Image::where('name', $currentImage->name)->count() > 1;
             if (! $currentImageUsed) {
                 Storage::disk('public')->delete('uploads/'.$currentImage->name);
+                $currentImage->delete();
             }
-            $currentImage->delete();
         }
 
         $fileName = $file->getClientOriginalName();
-        $path = config('app.url').'/storage/'.$file->storeAs('uploads', $fileName, 'public');
+        $existingImage = Image::where('name', $fileName)->first();
 
-        Image::create([
-            'hash' => $fileHash,
-            'name' => $fileName,
-            'path' => $path,
-            'entity_type' => $entityType,
-            'entity_id' => $entityId,
-        ]);
+        if ($existingImage) {
+            $path = $existingImage->path;
 
+            Image::create([
+                'name' => $fileName,
+                'path' => $path,
+                'entity_type' => $entityType,
+                'entity_id' => $entityId,
+            ]);
+        } else {
+            $path = config('app.url').'/storage/'.$file->storeAs('uploads', $fileName, 'public');
+
+            Image::create([
+                'name' => $fileName,
+                'path' => $path,
+                'entity_type' => $entityType,
+                'entity_id' => $entityId,
+            ]);
+        }
         return $path;
     }
 
-    public function delete(string $imageName, string $entity, string $entityId): void
+    public function delete(string $entity, string $entityId): void
     {
-        if (Storage::disk('public')->exists($imageName)) {
-            Storage::disk('public')->delete($imageName);
+        $image = Image::where('entity_type', $entity)->where('entity_id', $entityId)->first();
+        $currentImageUsed = Image::where('name', $image->name)->count() > 1;
+        if (! $currentImageUsed) {
+            Storage::disk('public')->delete('uploads/'.$image->name);
         }
-
-        Image::where('path', $imageName)->delete();
+        $image->delete();
     }
 }

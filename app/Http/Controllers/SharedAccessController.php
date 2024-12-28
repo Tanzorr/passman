@@ -8,7 +8,6 @@ use App\Http\Requests\StoreSharedAccessRequest;
 use App\Http\Requests\UpdateSacrednessRequest;
 use App\Models\SharedAccess;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class SharedAccessController extends Controller
 {

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('hash')->unique();
             $table->string('path');
             $table->string('name')->nullable();
             $table->string('entity_type')->nullable(); // Поліморфний тип

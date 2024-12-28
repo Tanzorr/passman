@@ -73,7 +73,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         if ($user->image) {
-            $this->imageUploadService->delete($user->image);
+            $this->imageUploadService->delete(User::type, $user->id);
         }
 
         return $user->delete() ? response()->json(null, 200) : response()->json(null, 404);

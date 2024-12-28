@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-    protected $fillable = ['hash', 'path', 'name', 'entity_type', 'entity_id'];
+    protected $fillable = ['path', 'name', 'entity_type', 'entity_id'];
 
     public function entity(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {
