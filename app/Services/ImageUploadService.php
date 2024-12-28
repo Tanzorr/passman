@@ -19,12 +19,15 @@ class ImageUploadService
         }
 
         if ($currentImage) {
-            Storage::disk('public')->delete('uploads/' . $currentImage->name);
+            $currentImageUsed = Image::where('name', $currentImage->name)->first();
+            if (! $currentImageUsed) {
+                Storage::disk('public')->delete('uploads/'.$currentImage->name);
+            }
             $currentImage->delete();
         }
 
         $fileName = $file->getClientOriginalName();
-        $path = config('app.url') . '/storage/' . $file->storeAs('uploads', $fileName, 'public');
+        $path = config('app.url').'/storage/'.$file->storeAs('uploads', $fileName, 'public');
 
         Image::create([
             'hash' => $fileHash,
