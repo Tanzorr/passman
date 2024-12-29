@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\SharedAccessController;
 use App\Http\Controllers\UserController;
@@ -19,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
         '/users/not-access/{entity}/{entityId}',
         [UserController::class, 'getNotAccessedUsers']
     );
+    Route::apiResource('/medias', MediaController::class);
 });
 
 Route::get('/csrf-token', function () {
