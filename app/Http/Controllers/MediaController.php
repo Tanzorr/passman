@@ -2,62 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMediaRequest;
 use App\Models\Media;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Services\MediaService;
+use Illuminate\Http\JsonResponse;
 
 class MediaController extends Controller
 {
+    protected $mediaService;
+
+    public function __construct(MediaService $mediaService)
+    {
+        $this->mediaService = $mediaService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $medias = Media::all()->sortByDesc('created_at');
-
-        return response()->json(['medias' => $medias]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json(['medias' => $this->mediaService->getAllUserMedia(auth()->id())]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreMediaRequest $request): JsonResponse
     {
-        $request->validate([
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        $request->validated();
 
         $file = $request->file('file');
 
-        $existingMedia = Media::where('user_id', auth()->id())
-            ->where('file_name', $file->getClientOriginalName())
-            ->first();
-
-        if ($existingMedia) {
-            return response()->json(['media' => $existingMedia, 'message' => 'File already exists'], 200);
-        }
-
-        $path = $file->store('uploads', 'public');
-
-        $media = Media::create([
-            'user_id' => auth()->id(),
-            'file_path' => config('app.url').'/'.$path,
-            'file_name' => $file->getClientOriginalName(),
-            'mime_type' => $file->getClientMimeType(),
-            'size' => $file->getSize(),
-        ]);
+        $media = $this->mediaService->storeMedia($file, auth()->id());
 
         return response()->json(['media' => $media], 201);
     }
@@ -71,33 +47,25 @@ class MediaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Media $media)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Media $media)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Media $media)
     {
-        $filePath = str_replace(config('app.url').'/', '', $media->file_path);
-        if (Storage::disk('public')->exists($filePath)) {
-            Storage::disk('public')->delete($filePath);
-        }
 
-        $media->delete();
+        $this->authorizeMediaAccess($media);
+
+        $this->mediaService->deleteMedia($media);
 
         return response()->json(['message' => 'Media deleted successfully'], 200);
+    }
+
+    /**
+     * Authorize media access for the current user.
+     */
+    private function authorizeMediaAccess(Media $media)
+    {
+        if ($media->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized access to media');
+        }
     }
 }
