@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Media;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class MediaService
@@ -10,9 +11,15 @@ class MediaService
     /**
      * Get all media for the authenticated user.
      */
-    public function getAllUserMedia(int $userId)
+    public function getAllUserMedia($search = '')
     {
-        return Media::whereUserId($userId)->get();
+        $userId = Auth::id();
+
+        return Media::where('user_id', $userId)
+            ->where('mime_type', 'like', 'image/%')
+            ->filterBySearch($search)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
     }
 
     /**
@@ -32,7 +39,7 @@ class MediaService
 
         return Media::create([
             'user_id' => $userId,
-            'file_path' => config('app.url').'/'.$path,
+            'file_path' => config('app.url').'/storage/'.$path,
             'file_name' => $file->getClientOriginalName(),
             'mime_type' => $file->getClientMimeType(),
             'size' => $file->getSize(),

@@ -21,7 +21,8 @@ class MediaController extends Controller
      */
     public function index()
     {
-        return response()->json(['medias' => $this->mediaService->getAllUserMedia(auth()->id())]);
+        $search = request('search');
+        return response()->json($this->mediaService->getAllUserMedia($search));
     }
 
     /**
