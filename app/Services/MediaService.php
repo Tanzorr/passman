@@ -3,18 +3,21 @@
 namespace App\Services;
 
 use App\Models\Media;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Facades\Storage;
 
 class MediaService
 {
+
+    public function __construct(protected Guard $auth, protected Storage $storage)
+    {
+    }
     /**
      * Get all media for the authenticated user.
      */
     public function getAllUserMedia($search = '')
     {
-        $userId = Auth::id();
-
-        return Media::where('user_id', $userId)
+        return Media::where('user_id', $this->auth->id())
             ->where('mime_type', 'like', 'image/%')
             ->filterBySearch($search)
             ->orderBy('created_at', 'desc')
@@ -24,8 +27,9 @@ class MediaService
     /**
      * Store a new media file.
      */
-    public function storeMedia($file, int $userId)
+    public function storeMedia($file)
     {
+        $userId = $this->auth->id();
         $existingMedia = Media::whereUserId($userId)
             ->where('file_name', $file->getClientOriginalName())
             ->first();
@@ -48,12 +52,17 @@ class MediaService
     /**
      * Delete a media file.
      */
-    public function deleteMedia(Media $media)
+    public function deleteMedia(Media $media): void
     {
-        if (\Storage::disk('public')->exists(str_replace(config('app.url').'/storage/', '', $media->file_path))) {
-            \Storage::disk('public')->delete(str_replace(config('app.url').'/storage/', '', $media->file_path));
-        }
-
+        $this->removeFileFromStorage($media->file_path);
         $media->delete();
+    }
+
+    private function removeFileFromStorage(string $filePath): void
+    {
+        $relativePath = str_replace(config('app.url').'/storage/', '', $filePath);
+        if ($this->storage::disk('public')->exists($relativePath)) {
+            $this->storage::disk('public')->delete($relativePath);
+        }
     }
 }

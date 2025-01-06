@@ -34,7 +34,7 @@ class MediaController extends Controller
 
         $file = $request->file('media');
 
-        $media = $this->mediaService->storeMedia($file, auth()->id());
+        $media = $this->mediaService->storeMedia($file);
 
         return response()->json(['media' => $media], 201);
     }
