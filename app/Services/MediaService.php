@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Media;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class MediaService
 {
@@ -49,12 +48,10 @@ class MediaService
     /**
      * Delete a media file.
      */
-    public function deleteMedia(Media $media): void
+    public function deleteMedia(Media $media)
     {
-        $filePath = str_replace(config('app.url').'/', '', $media->file_path);
-
-        if (Storage::disk('public')->exists($filePath)) {
-            Storage::disk('public')->delete($filePath);
+        if (\Storage::disk('public')->exists(str_replace(config('app.url').'/storage/', '', $media->file_path))) {
+            \Storage::disk('public')->delete(str_replace(config('app.url').'/storage/', '', $media->file_path));
         }
 
         $media->delete();
