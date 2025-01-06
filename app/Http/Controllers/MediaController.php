@@ -32,7 +32,7 @@ class MediaController extends Controller
     {
         $request->validated();
 
-        $file = $request->file('file');
+        $file = $request->file('media');
 
         $media = $this->mediaService->storeMedia($file, auth()->id());
 
