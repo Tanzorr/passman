@@ -21,8 +21,11 @@ class SharedAccessController extends Controller
         return $sharedAccessAction->handle($request);
     }
 
-    public function update(UpdateSacrednessRequest $request, string $id, UpdateSharedAccessAction $sharedAccessAction): JsonResponse
-    {
+    public function update(
+        UpdateSacrednessRequest $request,
+        string $id,
+        UpdateSharedAccessAction $sharedAccessAction
+    ): JsonResponse {
         return $sharedAccessAction->handle($request, $id);
     }
 

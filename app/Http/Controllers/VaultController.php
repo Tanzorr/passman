@@ -23,9 +23,7 @@ class VaultController extends Controller
     }
     public function show(Vault $vault): JsonResponse
     {
-        $vault->load(['passwords', 'sharedAccess', 'accessedUsers']);
-
-        return response()->json($vault);
+        return response()->json($vault->load(['passwords', 'sharedAccess', 'accessedUsers']));
     }
 
     public function update(UpdateVaultRequest $request, Vault $vault): JsonResponse

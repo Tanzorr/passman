@@ -31,9 +31,7 @@ class PasswordController extends Controller
 
     public function update(UpdatePasswordRequest $request, Password $password): JsonResponse
     {
-        $password->update($request->validated());
-
-        return response()->json($password);
+        return response()->json($password->update($request->validated()));
     }
 
     public function destroy(Password $password): JsonResponse

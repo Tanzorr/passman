@@ -55,13 +55,6 @@ class MediaController extends Controller
         return response()->json(['message' => 'Media deleted successfully'], 200);
     }
 
-    public function attachMediaToEntity(string $entityId, string $entityType, string $mediaId)
-    {
-        $entity = $entityType::findOrFail($entityId);
-
-        $this->mediaService->attachMediaToEntity($entity, $mediaId);
-    }
-
     /**
      * Authorize media access for the current user.
      */
