@@ -7,7 +7,6 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\SharedAccess;
 use App\Models\User;
-use App\Services\ImageUploadService;
 use App\Services\SharedAccessService;
 use Illuminate\Http\JsonResponse;
 
@@ -15,7 +14,6 @@ class UserController extends Controller
 {
     public function __construct(
         private SharedAccessService $sharedAccessService,
-        private ImageUploadService $imageUploadService
     ) {
     }
 
@@ -26,17 +24,9 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request): JsonResponse
     {
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $this->imageUploadService->upload($request->file('image'));
-        }
-
-        $user = User::create($validated);
-
         return response()->json([
             'message' => 'User created successfully',
-            'user' => $user,
+            'user' => User::create($request->validated()),
         ]);
     }
 
@@ -45,37 +35,16 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function update(UpdateUserRequest $request, string $id): JsonResponse
+    public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
-        $user = User::findOrFail($id);
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-            $imagePath = $this->imageUploadService->upload(
-                $request->file('image'),
-                'user',
-                $user->id
-            );
-
-            $validated['image'] = $imagePath;
-        }
-
-        $user->update($validated);
-
         return response()->json([
             'message' => 'User updated successfully',
-            'user' => $user,
+            'user' => $user->update($request->validated()),
         ]);
     }
 
-    public function destroy(string $id): JsonResponse
+    public function destroy(User $user): JsonResponse
     {
-        $user = User::findOrFail($id);
-
-        if ($user->image) {
-            $this->imageUploadService->delete(User::TYPE, $user->id);
-        }
-
         return $user->delete() ? response()->json(null, 200) : response()->json(null, 404);
     }
 

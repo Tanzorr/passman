@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('file_hashes', function (Blueprint $table) {
+        Schema::create('media_relations', function (Blueprint $table) {
             $table->id();
-            $table->string('hash')->unique();
-            $table->string('path');
+            $table->foreignId('media_id')->constrained()->cascadeOnDelete();
+            $table->morphs('mediable');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('file_hashes');
+        Schema::dropIfExists('media_relations');
     }
 };

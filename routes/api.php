@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EntityMediaController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\SharedAccessController;
@@ -21,6 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
         [UserController::class, 'getNotAccessedUsers']
     );
     Route::apiResource('/medias', MediaController::class);
+    Route::prefix('entities/{entityType}/{entityId}/media')->group(function () {
+        Route::post('attach', [EntityMediaController::class, 'attach']);
+        Route::post('detach', [EntityMediaController::class, 'detach']);
+    });
 });
 
 Route::get('/csrf-token', function () {

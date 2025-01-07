@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('role')->default('user');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('image')->nullable(); // Column to store user image path
             $table->rememberToken();
             $table->timestamps();
         });

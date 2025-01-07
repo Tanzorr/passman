@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\MediaServiceInterface;
 use App\Http\Requests\StoreMediaRequest;
 use App\Models\Media;
-use App\Services\MediaService;
 use Illuminate\Http\JsonResponse;
 
 class MediaController extends Controller
 {
     protected $mediaService;
 
-    public function __construct(MediaService $mediaService)
+    public function __construct(MediaServiceInterface $mediaService)
     {
         $this->mediaService = $mediaService;
     }
@@ -21,8 +21,7 @@ class MediaController extends Controller
      */
     public function index()
     {
-        $search = request('search');
-        return response()->json($this->mediaService->getAllUserMedia($search));
+        return response()->json($this->mediaService->getAllUserMedia(request('search')));
     }
 
     /**
@@ -32,11 +31,7 @@ class MediaController extends Controller
     {
         $request->validated();
 
-        $file = $request->file('media');
-
-        $media = $this->mediaService->storeMedia($file);
-
-        return response()->json(['media' => $media], 201);
+        return response()->json(['media' => $this->mediaService->storeMedia($request->file('media'))], 201);
     }
 
     /**
@@ -50,7 +45,7 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Media $media)
+    public function destroy(Media $media): JsonResponse
     {
 
         $this->authorizeMediaAccess($media);
@@ -60,10 +55,17 @@ class MediaController extends Controller
         return response()->json(['message' => 'Media deleted successfully'], 200);
     }
 
+    public function attachMediaToEntity(string $entityId, string $entityType, string $mediaId)
+    {
+        $entity = $entityType::findOrFail($entityId);
+
+        $this->mediaService->attachMediaToEntity($entity, $mediaId);
+    }
+
     /**
      * Authorize media access for the current user.
      */
-    private function authorizeMediaAccess(Media $media)
+    private function authorizeMediaAccess(Media $media): void
     {
         if ($media->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access to media');

@@ -24,4 +24,10 @@ class Media extends Model
 
         return $query;
     }
+
+    public function relatedEntities()
+    {
+        return $this->morphedByMany(MediaRelation::class, 'mediable');
+    }
+
 }

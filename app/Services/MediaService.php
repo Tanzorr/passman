@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\Contracts\MediaServiceInterface;
 use App\Models\Media;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Storage;
 
-class MediaService
+class MediaService implements MediaServiceInterface
 {
 
     public function __construct(protected Guard $auth, protected Storage $storage)
@@ -56,6 +57,16 @@ class MediaService
     {
         $this->removeFileFromStorage($media->file_path);
         $media->delete();
+    }
+
+    public function attachMediaToEntity($entity, $mediaId): void
+    {
+        $entity->media()->attach($mediaId);
+    }
+
+    public function detachMediaFromEntity($entity, $mediaId): void
+    {
+        $entity->media()->detach($mediaId);
     }
 
     private function removeFileFromStorage(string $filePath): void

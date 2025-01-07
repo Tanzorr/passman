@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Scopes\UserVaultScope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -29,7 +31,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $appends = ['ownVaults'];
+    protected $appends = ['ownVaults',  'media'];
 
     public function scopeFilterBySearch(Builder $query, $search = ''): Builder
     {
@@ -69,7 +71,7 @@ class User extends Authenticatable
             ]);
     }
 
-    public function getOwnVaultsAttribute(): \Illuminate\Database\Eloquent\Collection
+    public function getOwnVaultsAttribute(): Collection
     {
         return $this->vaults()->get();
     }
@@ -79,8 +81,13 @@ class User extends Authenticatable
         return $this->sharedVaultsRelation()->get();
     }
 
-    public function image()
+    public function media(): MorphToMany
     {
-        return $this->morphOne(Image::class, 'entity');
+        return $this->morphToMany(Media::class, 'mediable', 'media_relations');
+    }
+
+    public function getMediaAttribute()
+    {
+        return $this->media()->get();
     }
 }
