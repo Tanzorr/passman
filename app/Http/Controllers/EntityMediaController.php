@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Contracts\MediaServiceInterface;
 use App\Http\Requests\AttachMediaRequest;
-use App\Models\Password;
-use App\Models\User;
-use App\Models\Vault;
+use App\Http\Requests\DetachMediaRequest;
+use App\Traits\ResolvesEntities;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class EntityMediaController extends Controller
 {
+    use ResolvesEntities;
+
     public function __construct(private MediaServiceInterface $mediaService) {}
 
     public function attach(AttachMediaRequest $request): JsonResponse
@@ -20,7 +20,7 @@ class EntityMediaController extends Controller
         $validated = $request->validated();
 
         try {
-            $entityClass = $this->resolveEntityClass($validated['entity_type']);
+            $entityClass = $this->resolveEntity($validated['entity_type'], $validated['entity_id']);
             $entity = $entityClass::findOrFail($validated['entity_id']);
             $this->mediaService->attachMediaToEntity($entity, $validated['media_id']);
 
@@ -30,14 +30,12 @@ class EntityMediaController extends Controller
         }
     }
 
-    public function detach(Request $request): JsonResponse
+    public function detach(DetachMediaRequest $request): JsonResponse
     {
-        $request->validate([
-            'media_id' => 'required|exists:media,id',
-        ]);
+        $validated = $request->validated();
 
         try {
-            $entityClass = $this->resolveEntityClass($request->entity_type);
+            $entityClass = $this->resolveEntity($validated['entity_type'], $validated['entity_id']);
             $entity = $entityClass::findOrFail($request->entity_id);
 
             $this->mediaService->detachMediaFromEntity($entity, $request->media_id);
@@ -46,20 +44,5 @@ class EntityMediaController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Entity not found.'], 404);
         }
-    }
-
-    private function resolveEntityClass($entityType): string
-    {
-        $map = [
-            'vault' => Vault::class,
-            'password' => Password::class,
-            'user' => User::class,
-        ];
-
-        if (! array_key_exists($entityType, $map)) {
-            throw new ModelNotFoundException('Entity type not recognized.');
-        }
-
-        return $map[$entityType];
     }
 }
