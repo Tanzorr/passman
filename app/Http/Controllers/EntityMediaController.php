@@ -15,13 +15,13 @@ class EntityMediaController extends Controller
 {
     public function __construct(private MediaServiceInterface $mediaService) {}
 
-    public function attach(AttachMediaRequest $request, $entityType, $entityId): JsonResponse
+    public function attach(AttachMediaRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
         try {
-            $entityClass = $this->resolveEntityClass($entityType);
-            $entity = $entityClass::findOrFail($entityId);
+            $entityClass = $this->resolveEntityClass($validated['entity_type']);
+            $entity = $entityClass::findOrFail($validated['entity_id']);
             $this->mediaService->attachMediaToEntity($entity, $validated['media_id']);
 
             return response()->json(['message' => 'Media attached successfully.'], 200);
@@ -30,15 +30,15 @@ class EntityMediaController extends Controller
         }
     }
 
-    public function detach(Request $request, $entityType, $entityId): JsonResponse
+    public function detach(Request $request): JsonResponse
     {
         $request->validate([
             'media_id' => 'required|exists:media,id',
         ]);
 
         try {
-            $entityClass = $this->resolveEntityClass($entityType);
-            $entity = $entityClass::findOrFail($entityId);
+            $entityClass = $this->resolveEntityClass($request->entity_type);
+            $entity = $entityClass::findOrFail($request->entity_id);
 
             $this->mediaService->detachMediaFromEntity($entity, $request->media_id);
 

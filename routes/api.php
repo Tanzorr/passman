@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
         [UserController::class, 'getNotAccessedUsers']
     );
     Route::apiResource('/medias', MediaController::class);
-    Route::prefix('entities/{entityType}/{entityId}/media')->group(function () {
+    Route::prefix('entities/media')->group(function () {
         Route::post('attach', [EntityMediaController::class, 'attach']);
         Route::post('detach', [EntityMediaController::class, 'detach']);
     });
