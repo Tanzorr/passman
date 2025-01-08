@@ -16,14 +16,14 @@ trait ResolvesEntities
         'user' => User::class,
     ];
 
-    public function resolveEntity(string $entityType, int $entityId): Model
+    public function resolveEntity(string $mediableType, int $mediableId): Model
     {
-        if (! array_key_exists($entityType, $this->entityMap)) {
+        if (! array_key_exists($mediableType, $this->entityMap)) {
             throw new ModelNotFoundException('Entity type not recognized.');
         }
 
-        $entityClass = $this->entityMap[$entityType];
+        $entityClass = $this->entityMap[$mediableType];
 
-        return $entityClass::findOrFail($entityId);
+        return $entityClass::findOrFail($mediableId);
     }
 }

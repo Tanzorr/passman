@@ -23,8 +23,8 @@ class DetachMediaRequest extends FormRequest
     {
         return [
             'media_id' => 'required|exists:media,id',
-            'entity_id' => 'required|integer',
-            'entity_type' => 'required|string',
+            'mediable_id' => 'required|integer',
+            'mediable_type' => 'required|string',
         ];
     }
 }

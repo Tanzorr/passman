@@ -29,5 +29,4 @@ class Media extends Model
     {
         return $this->morphedByMany(MediaRelation::class, 'mediable');
     }
-
 }
