@@ -3,10 +3,13 @@
 namespace App\Http\Requests;
 
 use App\Models\MediaRelation;
+use App\Traits\ResolvesEntities;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AttachMediaRequest extends FormRequest
 {
+    use ResolvesEntities;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,13 +30,16 @@ class AttachMediaRequest extends FormRequest
                 'required',
                 'exists:media,id',
                 function ($attribute, $value, $fail) {
-                    if (MediaRelation::with('media')->where('media_id', $value)->exists()) {
+                    if (MediaRelation::where('media_id', $this->media_id)
+                        ->where('mediable_type', $this->entityMap[$this->mediable_type])
+                        ->where('mediable_id', $this->mediable_id)->exists()
+                    ) {
                         $fail('This media is already attached to the entity.');
                     }
                 },
             ],
-            'entity_type' => 'required|string',
-            'entity_id' => 'required|integer',
+            'mediable_type' => 'required|string',
+            'mediable_id' => 'required|integer',
         ];
     }
 

@@ -18,7 +18,7 @@ class AttachMediaAction
     public function execute(array $validated): JsonResponse
     {
         try {
-            $entity = $this->resolveEntity($validated['entity_type'], $validated['entity_id']);
+            $entity = $this->resolveEntity($validated['mediable_type'], $validated['mediable_id']);
 
             $this->mediaService->attachMediaToEntity($entity, $validated['media_id']);
 

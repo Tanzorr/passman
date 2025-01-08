@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait ResolvesEntities
 {
-    private array $entityMap = [
+    public array $entityMap = [
         'vault' => Vault::class,
         'password' => Password::class,
         'user' => User::class,
