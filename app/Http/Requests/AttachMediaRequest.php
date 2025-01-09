@@ -29,8 +29,7 @@ class AttachMediaRequest extends FormRequest
             'media_id' => [
                 'required',
                 'exists:media,id',
-                $this->mediaAlreadyAttachedRule()
-                ,
+                $this->mediaAlreadyAttachedRule(),
             ],
             'mediable_type' => 'required|string',
             'mediable_id' => 'required|integer',

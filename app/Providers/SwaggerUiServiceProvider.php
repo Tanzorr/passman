@@ -14,5 +14,7 @@ class SwaggerUiServiceProvider extends ServiceProvider
                 //
             ]);
         });
+
+        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
     }
 }
