@@ -10,6 +10,7 @@ use App\Models\SharedAccess;
 use App\Models\User;
 use App\Queries\GetQuery;
 use App\Services\SharedAccessService;
+use App\Http\Requests;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller

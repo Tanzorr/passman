@@ -2,29 +2,673 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Pass Manager API",
-        "description": "Документация API для Pass Manager",
+        "description": "API documentation for Pass Manager application",
+        "contact": {
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
         "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/",
+            "description": "Local development server"
+        }
+    ],
     "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Log in a user",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged in successfully"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIxIn0"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Log out a user",
+                "operationId": "7b2bfa4aa2372ab1d9db7b0f40688581",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/entities/media/attach": {
+            "post": {
+                "tags": [
+                    "EntityMedia"
+                ],
+                "summary": "Attach media to an entity",
+                "operationId": "attachMedia",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EntityMedia"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Media attached successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Media attached successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/entities/media/detach": {
+            "post": {
+                "tags": [
+                    "EntityMedia"
+                ],
+                "summary": "Detach media from an entity",
+                "operationId": "detachMedia",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EntityMedia"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Media detached successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Media detached successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/medias": {
+            "get": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Get a list of all media records",
+                "operationId": "getMedias",
+                "responses": {
+                    "200": {
+                        "description": "List of media records",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Media"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Upload a media file",
+                "operationId": "uploadMedia",
+                "requestBody": {
+                    "description": "Media file to upload",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "media"
+                                ],
+                                "properties": {
+                                    "media": {
+                                        "description": "The media file to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Media uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Media"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/medias/{media}": {
+            "get": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Get details of a specific media record",
+                "operationId": "getMedia",
+                "parameters": [
+                    {
+                        "name": "media",
+                        "in": "path",
+                        "description": "Media ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Media details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Media"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Media not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Delete a media record",
+                "operationId": "deleteMedia",
+                "parameters": [
+                    {
+                        "name": "media",
+                        "in": "path",
+                        "description": "Media ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Media record deleted successfully"
+                    },
+                    "404": {
+                        "description": "Media not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/passwords": {
             "get": {
                 "tags": [
-                    "Admin"
+                    "Passwords"
                 ],
-                "summary": "List all non-admin users",
-                "operationId": "5e82e0753f0734f5a63ac3c393c0a2c4",
+                "summary": "Get a list of passwords for a specific vault",
+                "operationId": "getPasswords",
                 "responses": {
                     "200": {
-                        "description": "passwords retrieved success"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "500": {
-                        "description": "Server Error"
+                        "description": "List of passwords",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Password"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Passwords"
+                ],
+                "summary": "Create a new password",
+                "operationId": "cd3361ce08424d71272a9829adb7578a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StorePasswordRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Password created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Password created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/passwords/{password}": {
+            "get": {
+                "tags": [
+                    "Passwords"
+                ],
+                "summary": "Get details of a specific password",
+                "operationId": "aa6349cbc688846c4eee414abac8e01d",
+                "parameters": [
+                    {
+                        "name": "password",
+                        "in": "path",
+                        "description": "Password ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Password"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Passwords"
+                ],
+                "summary": "Update a password",
+                "operationId": "c57900d7a230ca60ed347641e5a53fc9",
+                "parameters": [
+                    {
+                        "name": "password",
+                        "in": "path",
+                        "description": "Password ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Password"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Password updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Passwords"
+                ],
+                "summary": "Delete a password",
+                "operationId": "f362e8e7900a518c6d496b33ad70e3a0",
+                "parameters": [
+                    {
+                        "name": "password",
+                        "in": "path",
+                        "description": "Password ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Password deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/shared-accesses": {
+            "get": {
+                "tags": [
+                    "SharedAccess"
+                ],
+                "summary": "Get a list of all shared access records",
+                "operationId": "getSharedAccess",
+                "responses": {
+                    "200": {
+                        "description": "List of shared access records",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SharedAccess"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "SharedAccess"
+                ],
+                "summary": "Create a new shared access record",
+                "operationId": "70049fda38d304de7b59603bb525fb3a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreSharedAccessRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Shared access record created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Shared access record created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/shared-accesses/{id}": {
+            "put": {
+                "tags": [
+                    "SharedAccess"
+                ],
+                "summary": "Update a shared access record",
+                "operationId": "updateSharedAccess",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Shared access record ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateSharedAccessRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Shared access record updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Shared access record updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "SharedAccess"
+                ],
+                "summary": "Delete a shared access record",
+                "operationId": "deleteSharedAccess",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Shared access record ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Shared access record deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Shared access record deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -36,69 +680,98 @@
         },
         "/api/users": {
             "get": {
-                "summary": "Display a listing of the resource",
-                "operationId": "c457726701591d1183b53aa71fc13441",
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get a list of users",
+                "operationId": "2f42d449c840d1aa8f0ddfd80937bf53",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "List of users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
-                "summary": "Store a newly created resource in storage",
-                "operationId": "592819a0265360b2014512d6dbfaf0e7",
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create a new user",
+                "operationId": "f4fa27d4126548d2f850d12637f670fd",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "allOf": [
-                                    {
-                                        "properties": {
-                                            "name": {
-                                                "type": "string",
-                                                "example": "John Doe"
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    {
-                                        "properties": {
-                                            "email": {
-                                                "type": "string",
-                                                "example": "example@gmail.com"
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    {
-                                        "properties": {
-                                            "password": {
-                                                "type": "string",
-                                                "example": "password"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                ]
+                                "$ref": "#/components/schemas/StoreUserRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "User created successfully"
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User created successfully"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
-        "/api/users/{id}": {
+        "/api/users/{user}": {
             "get": {
-                "summary": "Display the specified resource",
-                "operationId": "36a33ff774d5cba33c039dec2c3e0287",
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get details of a specific user",
+                "operationId": "0d35139a125d85966db2ce48cfbf3f53",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "user",
                         "in": "path",
+                        "description": "User ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -107,17 +780,33 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "User details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
-                "summary": "Update the specified resource in storage",
-                "operationId": "b9091397c8b25f12c6adb74be6ce3a5a",
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update a user",
+                "operationId": "f977e2e72b6dd97fc45364ab215a33ad",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "user",
                         "in": "path",
+                        "description": "User ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -125,21 +814,53 @@
                     }
                 ],
                 "requestBody": {
-                    "required": true
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
                 },
                 "responses": {
                     "200": {
-                        "description": "User updated successfully"
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User updated successfully"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
-                "summary": "Remove the specified resource from storage",
-                "operationId": "fa56cffde745d3f152f95cbacd936c0b",
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete a user",
+                "operationId": "8e68752538e504286c0934fb8b4e1513",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "user",
                         "in": "path",
+                        "description": "User ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -148,107 +869,657 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User deleted successfully"
-                    },
-                    "404": {
-                        "description": "User not found"
+                        "description": "User deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
-        "/vaults": {
+        "/api/users/not-accessed/{entityType}/{entityId}": {
             "get": {
-                "summary": "Display a listing of the resource",
-                "operationId": "3eb78925e5459e4b5ed698512a45207b",
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get users who do not have access to a specific entity",
+                "operationId": "8e09af483d8d8d43968ce446c1b44913",
+                "parameters": [
+                    {
+                        "name": "entityType",
+                        "in": "path",
+                        "description": "Entity type",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "entityId",
+                        "in": "path",
+                        "description": "Entity ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "List of users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vaults": {
+            "get": {
+                "tags": [
+                    "Vault"
+                ],
+                "summary": "Get all vaults",
+                "operationId": "getVaults",
+                "responses": {
+                    "200": {
+                        "description": "List of vaults",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Vault"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
-                "summary": "Store a newly created resource in storage",
-                "operationId": "c9851be49dc9ae0571cb7f394eac8866",
+                "tags": [
+                    "Vault"
+                ],
+                "summary": "Create a new vault",
+                "operationId": "createVault",
                 "requestBody": {
-                    "required": true
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreVaultRequest"
+                            }
+                        }
+                    }
                 },
                 "responses": {
                     "201": {
-                        "description": "Vault created successfully"
+                        "description": "Vault created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "John Doe's vault"
+                                        },
+                                        "is_shared": {
+                                            "type": "boolean",
+                                            "example": false
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input data"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
-        "/vaults/{id}": {
+        "/api/vaults/{id}": {
             "get": {
-                "summary": "Display the specified resource",
-                "operationId": "da6c5953d4f1238428d6826434dd1a76",
+                "tags": [
+                    "Vault"
+                ],
+                "summary": "Get a single vault",
+                "operationId": "getVault",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "ID of the vault",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "Vault details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Vault"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
-                "summary": "Update the specified resource in storage",
-                "operationId": "e368e321ee19ac969403ce4d2dce0cee",
+                "tags": [
+                    "Vault"
+                ],
+                "summary": "Update a vault",
+                "operationId": "updateVault",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "ID of the vault",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
                 "requestBody": {
-                    "required": true
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateVaultRequest"
+                            }
+                        }
+                    }
                 },
                 "responses": {
                     "200": {
                         "description": "Vault updated successfully"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
-                "summary": "Remove the specified resource from storage",
-                "operationId": "5d221ffd1c42193197e856c6278fc76d",
+                "tags": [
+                    "Vault"
+                ],
+                "summary": "Delete a vault",
+                "operationId": "deleteVault",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "ID of the vault",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Vault deleted successfully"
-                    },
-                    "404": {
-                        "description": "Vault not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "LoginUserRequest": {
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "admin@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "Vault": {
+                "required": [
+                    "id",
+                    "user_id",
+                    "name",
+                    "description",
+                    "created_at",
+                    "updated_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Vault 1"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Personal vault"
+                    },
+                    "is_shared": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T12:30:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreVaultRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Updated Vault Name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Updated description"
+                    },
+                    "user_id": {
+                        "type": "intager",
+                        "example": 11
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateVaultRequest": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Updated Vault Name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Updated description"
+                    },
+                    "user_id": {
+                        "type": "intager",
+                        "example": 11
+                    }
+                },
+                "type": "object"
+            },
+            "Password": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "vault_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Facebook"
+                    },
+                    "value": {
+                        "type": "string",
+                        "example": "johndoe"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-08-01T00:00:00.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-08-01T00:00:00.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StorePasswordRequest": {
+                "properties": {
+                    "vault_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Facebook"
+                    },
+                    "value": {
+                        "type": "string",
+                        "example": "johndoe"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "My Facebook password"
+                    }
+                },
+                "type": "object"
+            },
+            "SharedAccess": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "accessible_type": {
+                        "type": "string",
+                        "example": "VaultModel"
+                    },
+                    "accessible_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-08-01T00:00:00.000000Z"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-08-01T00:00:00.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-08-01T00:00:00.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreSharedAccessRequest": {
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "accessible_type": {
+                        "type": "string",
+                        "example": "VaultModel"
+                    },
+                    "accessible_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-08-01T00:00:00.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateSharedAccessRequest": {
+                "required": [
+                    "user_id",
+                    "accessible_type",
+                    "accessible_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "accessible_type": {
+                        "type": "string",
+                        "example": "VaultModel"
+                    },
+                    "accessible_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2028-08-01T00:00:00.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "Media": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "file_name": {
+                        "type": "string",
+                        "example": "example.jpg"
+                    },
+                    "file_path": {
+                        "type": "string",
+                        "example": "/uploads/example.jpg"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-08-01T00:00:00.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-08-01T00:00:00.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "EntityMedia": {
+                "properties": {
+                    "media_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "mediable_type": {
+                        "type": "string",
+                        "example": "user"
+                    },
+                    "mediable_id": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "example@ukr.net"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-01T12:00:00"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-01T12:00:00"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreUserRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "example@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    },
+                    "password_confirmation": {
+                        "type": "string",
+                        "example": "password"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "JWT Bearer token authentication",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     },
     "tags": [
         {
-            "name": "Admin",
-            "description": "Admin"
+            "name": "Auth",
+            "description": "Operations related to user authentication"
+        },
+        {
+            "name": "Vault",
+            "description": "Operations related to vault management"
+        },
+        {
+            "name": "Passwords",
+            "description": "API Endpoints for managing passwords"
+        },
+        {
+            "name": "SharedAccess",
+            "description": "Operations related to shared access management"
+        },
+        {
+            "name": "Media",
+            "description": "Operations related to media management"
+        },
+        {
+            "name": "EntityMedia",
+            "description": "API Endpoints for managing entity media relations"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
         }
     ]
 }
