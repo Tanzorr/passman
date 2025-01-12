@@ -2,17 +2,17 @@
 
 namespace App\Actions;
 
+use App\Contracts\QueryInterface;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 
 class GetUsersAction
 {
-    public function handle($search): JsonResponse
+    public function handle(QueryInterface $query)
     {
-        return response()->json(
-            User::filterBySearch($search)
-                ->orderBy('created_at', 'desc')
-                ->paginate()
-        );
+        $users = User::filterBySearch($query->getParameter('search'))
+            ->orderBy('created_at', 'desc')
+            ->paginate();
+
+        return $users;
     }
 }
