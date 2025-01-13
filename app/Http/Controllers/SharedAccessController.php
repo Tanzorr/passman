@@ -18,15 +18,15 @@ class SharedAccessController extends Controller
 
     public function store(StoreSharedAccessRequest $request, StoreSharedAccessAction $sharedAccessAction): JsonResponse
     {
-        return $sharedAccessAction->handle($request);
+        return response()->json($sharedAccessAction->handle($request), 201);
     }
 
     public function update(
+        string $id,
         UpdateSharedAccessRequest $request,
-        string                    $id,
-        UpdateSharedAccessAction  $sharedAccessAction
+        UpdateSharedAccessAction $sharedAccessAction
     ): JsonResponse {
-        return $sharedAccessAction->handle($request, $id);
+        return response()->json($sharedAccessAction->handle($request, $id), 200);
     }
 
     public function destroy(string $id): JsonResponse

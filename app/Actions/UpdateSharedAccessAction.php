@@ -2,19 +2,17 @@
 
 namespace App\Actions;
 
-use App\Http\Requests\StoreSharedAccessRequest;
-use App\Http\Requests\UpdateSharedAccessRequest;
+use App\Contracts\MutationActionInterface;
 use App\Models\SharedAccess;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 
-class UpdateSharedAccessAction
+class UpdateSharedAccessAction implements MutationActionInterface
 {
-    public function handle(UpdateSharedAccessRequest $request, string $id): JsonResponse
+    public function handle(ValidatesWhenResolved $request, string $id): mixed
     {
         $sharedAccess = SharedAccess::findOrFail($id);
         $sharedAccess->update($request->all());
 
-        return response()->json('shared access updated', 200);
+        return $sharedAccess;
     }
 }

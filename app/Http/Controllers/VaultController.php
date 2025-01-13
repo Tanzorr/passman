@@ -6,13 +6,14 @@ use App\Actions\GetVaultsAction;
 use App\Http\Requests\StoreVaultRequest;
 use App\Http\Requests\UpdateVaultRequest;
 use App\Models\Vault;
+use App\Queries\GetUsersQuery;
 use Illuminate\Http\JsonResponse;
 
 class VaultController extends Controller
 {
     public function index(GetVaultsAction $getVaultsAction): JsonResponse
     {
-        return $getVaultsAction->handle(request()->get('search'));
+        return $getVaultsAction->handle(new GetUsersQuery(['search' => request('search')]));
     }
 
     public function store(StoreVaultRequest $request): JsonResponse

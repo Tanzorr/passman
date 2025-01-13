@@ -4,5 +4,5 @@ namespace App\Contracts;
 
 interface MutationInterface
 {
-    public function getParameter(mixed $parameter): mixed;
+    public function getParameter(mixed $parameters): mixed;
 }
