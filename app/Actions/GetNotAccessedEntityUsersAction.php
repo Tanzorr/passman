@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use App\Contracts\MutationActionInterface;
+use App\Contracts\MutationInterface;
 use App\Contracts\QueryInterface;
 use App\Models\User;
 use Illuminate\Support\Collection;

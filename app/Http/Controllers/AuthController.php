@@ -12,12 +12,9 @@ use Session;
 class AuthController extends Controller
 {
     /**
-     * @throws ValidationException
      */
     public function login(LoginUserRequest $request, LoginAction $loginAction): JsonResponse
     {
-        $loginData = $loginAction->handle($request);
-
         return response()->json($loginAction->handle($request), 200);
     }
 

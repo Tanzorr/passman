@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 
 class UpdateSharedAccessAction implements MutationActionInterface
 {
-    public function handle(ValidatesWhenResolved $request, string $id): mixed
+    public function handle(ValidatesWhenResolved $request, $id = ''): mixed
     {
         $sharedAccess = SharedAccess::findOrFail($id);
         $sharedAccess->update($request->all());
