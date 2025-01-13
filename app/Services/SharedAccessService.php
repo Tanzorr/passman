@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 class SharedAccessService
 {
-    public function getSharedAccess(string $accessibleType, string $accessibleId): Collection
+    public function getSharedEntityAccessUserIds(string $accessibleType, string $accessibleId): Collection
     {
         return SharedAccess::where('accessible_type', $accessibleType)
             ->where('accessible_id', $accessibleId)

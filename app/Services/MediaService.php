@@ -5,18 +5,17 @@ namespace App\Services;
 use App\Contracts\MediaServiceInterface;
 use App\Models\Media;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 
 class MediaService implements MediaServiceInterface
 {
+    public function __construct(protected Guard $auth) {}
 
-    public function __construct(protected Guard $auth, protected Storage $storage)
-    {
-    }
     /**
      * Get all media for the authenticated user.
      */
-    public function getAllUserMedia($search = '')
+    public function getAllUserMedia($search = ''): LengthAwarePaginator
     {
         return Media::where('user_id', $this->auth->id())
             ->where('mime_type', 'like', 'image/%')
@@ -28,7 +27,7 @@ class MediaService implements MediaServiceInterface
     /**
      * Store a new media file.
      */
-    public function storeMedia($file)
+    public function storeMedia($file): Media
     {
         $userId = $this->auth->id();
         $existingMedia = Media::whereUserId($userId)
@@ -72,8 +71,8 @@ class MediaService implements MediaServiceInterface
     private function removeFileFromStorage(string $filePath): void
     {
         $relativePath = str_replace(config('app.url').'/storage/', '', $filePath);
-        if ($this->storage::disk('public')->exists($relativePath)) {
-            $this->storage::disk('public')->delete($relativePath);
+        if (Storage::disk('public')->exists($relativePath)) {
+            Storage::disk('public')->delete($relativePath);
         }
     }
 }

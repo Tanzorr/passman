@@ -38,9 +38,9 @@ class UpdateUserRequest extends FormRequest
     public function messages()
     {
         return [
-            'image.image' => 'Файл має бути зображенням.',
-            'image.mimes' => 'Допустимі формати зображень: jpeg, png, jpg, gif, svg.',
-            'image.max' => 'Максимальний розмір зображення: 2 MB.',
+            'image.image' => 'File must be an image.',
+            'image.mimes' => 'Aloud formats: jpeg, png, jpg, gif, svg.',
+            'image.max' => 'Max size: 2 MB.',
         ];
     }
 }

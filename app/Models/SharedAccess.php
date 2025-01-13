@@ -14,8 +14,8 @@ class SharedAccess extends Model
     const VAULT_TYPE = 'App\\Models\\Vault';
 
     const ACCESS_TYPE_MAP = [
-        'vault' => 'App\\Models\\Vault',
-        'password' => 'App\\Models\\Password',
+        'VaultModel' => 'App\\Models\\Vault',
+        'PasswordModel' => 'App\\Models\\Password',
     ];
 
     protected $fillable = [

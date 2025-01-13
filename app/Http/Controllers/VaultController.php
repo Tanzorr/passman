@@ -28,7 +28,7 @@ class VaultController extends Controller
 
     public function update(UpdateVaultRequest $request, Vault $vault): JsonResponse
     {
-        $vault->where('id', $request->validated()['id'])->update($request->validated());
+        $vault->update($request->validated());
 
         return response()->json(['message' => 'Vault updated successfully']);
     }

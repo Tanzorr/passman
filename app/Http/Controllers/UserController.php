@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetNotAccessedEntityUsersAction;
 use App\Actions\GetUsersAction;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -15,13 +16,12 @@ class UserController extends Controller
 {
     public function __construct(
         private SharedAccessService $sharedAccessService,
-    ) {}
+    ) {
+    }
 
     public function index(GetUsersAction $getUsersAction): JsonResponse
     {
-        $query = new GetUsersQuery(['search' => request('search')]); // Створюємо Query
-
-        return response()->json($getUsersAction->handle($query));
+        return response()->json($getUsersAction->handle(new GetUsersQuery(['search' => request('search')])));
     }
 
     public function store(StoreUserRequest $request): JsonResponse
@@ -50,14 +50,17 @@ class UserController extends Controller
         return $user->delete() ? response()->json(null, 200) : response()->json(null, 404);
     }
 
-    public function getNotAccessedUsers(string $entityType, string $entityId): JsonResponse
-    {
-        return response()->json(User::whereNotIn(
-            'id',
-            $this->sharedAccessService->getSharedAccess(SharedAccess::ACCESS_TYPE_MAP[$entityType], $entityId)
-        )
-            ->filterBySearch(request('search'))
-            ->take(5)
-            ->get());
+    public function getNotAccessedUsers(
+        string $entityType,
+        string $entityId,
+        GetNotAccessedEntityUsersAction $accessedEntityUsersAction
+    ): JsonResponse {
+        return response()->json($accessedEntityUsersAction->handle(
+            new GetUsersQuery(['search' => request('search')]),
+            $this->sharedAccessService->getSharedEntityAccessUserIds(
+                SharedAccess::ACCESS_TYPE_MAP[$entityType],
+                $entityId
+            )
+        ));
     }
 }
