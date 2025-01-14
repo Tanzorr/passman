@@ -8,7 +8,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\SharedAccess;
 use App\Models\User;
-use App\Queries\GetUsersQuery;
+use App\Queries\GetQuery;
 use App\Services\SharedAccessService;
 use Illuminate\Http\JsonResponse;
 
@@ -20,7 +20,7 @@ class UserController extends Controller
 
     public function index(GetUsersAction $getUsersAction): JsonResponse
     {
-        return response()->json($getUsersAction->handle(new GetUsersQuery(['search' => request('search')])));
+        return response()->json($getUsersAction->handle(new GetQuery(['search' => request('search')])));
     }
 
     public function store(StoreUserRequest $request): JsonResponse
@@ -55,11 +55,12 @@ class UserController extends Controller
         GetNotAccessedEntityUsersAction $accessedEntityUsersAction
     ): JsonResponse {
         return response()->json($accessedEntityUsersAction->handle(
-            new GetUsersQuery(['search' => request('search')]),
-            $this->sharedAccessService->getSharedEntityAccessUserIds(
-                SharedAccess::ACCESS_TYPE_MAP[$entityType],
-                $entityId
-            )
+            new GetQuery([
+                'search' => request('search'),
+                'accessed_user_ids' => $this->sharedAccessService->getSharedEntityAccessUserIds(
+                    SharedAccess::ACCESS_TYPE_MAP[$entityType],
+                    $entityId
+                )])
         ));
     }
 }

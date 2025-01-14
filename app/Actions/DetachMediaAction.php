@@ -13,18 +13,11 @@ class DetachMediaAction
 
     public function __construct(private MediaServiceInterface $mediaService) {}
 
-    public function execute(array $validated): JsonResponse
+    public function handle(array $data): bool
     {
-        try {
-            $entity = $this->resolveEntity($validated['mediable_type'], $validated['mediable_id']);
+        $entity = $this->resolveEntity($data['mediable_type'], $data['mediable_id']);
+        $this->mediaService->detachMediaFromEntity($entity, $data['media_id']);
 
-            $this->mediaService->detachMediaFromEntity($entity, $validated['media_id']);
-
-            return response()->json(['message' => 'Media detached successfully.'], 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => $e->getMessage()], 404);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'An unexpected error occurred.'], 500);
-        }
+        return true;
     }
 }

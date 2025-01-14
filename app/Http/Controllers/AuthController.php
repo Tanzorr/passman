@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\LoginAction;
 use App\Http\Requests\LoginUserRequest;
+use App\Queries\GetQuery;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
+
 use Session;
 
 class AuthController extends Controller
@@ -15,7 +15,7 @@ class AuthController extends Controller
      */
     public function login(LoginUserRequest $request, LoginAction $loginAction): JsonResponse
     {
-        return response()->json($loginAction->handle($request), 200);
+        return response()->json($loginAction->handle(new GetQuery(['credentials' => $request->all()])), 200);
     }
 
     /**

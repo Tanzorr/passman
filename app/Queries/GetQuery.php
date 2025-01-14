@@ -4,7 +4,7 @@ namespace App\Queries;
 
 use App\Contracts\QueryInterface;
 
-class GetUsersQuery implements QueryInterface
+class GetQuery implements QueryInterface
 {
 
     public function __construct(private array $parameters = [])

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\StoreSharedAccessAction;
-use App\Actions\UpdateSharedAccessAction;
 use App\Http\Requests\StoreSharedAccessRequest;
 use App\Http\Requests\UpdateSharedAccessRequest;
 use App\Models\SharedAccess;
@@ -22,11 +21,10 @@ class SharedAccessController extends Controller
     }
 
     public function update(
-        string $id,
-        UpdateSharedAccessRequest $request,
-        UpdateSharedAccessAction $sharedAccessAction
+        SharedAccess $sharedAccess,
+        UpdateSharedAccessRequest $request
     ): JsonResponse {
-        return response()->json($sharedAccessAction->handle(['attributes' => $request->all(), 'id' => $id]), 200);
+        return response()->json($sharedAccess->update($request->validated()), 200);
     }
 
     public function destroy(SharedAccess $sharedAccess): JsonResponse

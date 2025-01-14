@@ -2,20 +2,20 @@
 
 namespace App\Actions;
 
-use App\Contracts\MutationActionInterface;
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
+use App\Contracts\QueryInterface;
+use App\Contracts\ReadActionInterface;
 use Illuminate\Support\Facades\Auth;
 
-class LoginAction implements MutationActionInterface
+class LoginAction implements ReadActionInterface
 {
-    public function handle(ValidatesWhenResolved $request, $id = ''): mixed
+    public function handle(QueryInterface $query): array|false
     {
-        if (! Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+        if (! Auth::attempt($query->get('credentials'))) {
+            return false;
         }
         $user = Auth::user();
         if (! $user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return false;
         }
 
         return [

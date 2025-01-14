@@ -2,20 +2,17 @@
 
 namespace App\Actions;
 
-use App\Contracts\ReadActionInterface;
 use App\Contracts\QueryInterface;
+use App\Contracts\ReadActionInterface;
 use App\Models\Vault;
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class GetVaultsAction implements ReadActionInterface
 {
-    public function handle(QueryInterface| ValidatesWhenResolved $query): JsonResponse
+    public function handle(QueryInterface $query): LengthAwarePaginator
     {
-        return response()->json(
-            Vault::filterBySearch($query->get('search'))
-                ->orderBy('created_at', 'desc')
-                ->paginate()
-        );
+        return Vault::filterBySearch($query->get('search'))
+            ->orderBy('created_at', 'desc')
+            ->paginate();
     }
 }

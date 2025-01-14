@@ -5,8 +5,6 @@ namespace App\Actions;
 use App\Contracts\MutationActionInterface;
 use App\Models\SharedAccess;
 use App\Models\User;
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
-use App\Contracts\QueryInterface;
 
 class StoreSharedAccessAction implements MutationActionInterface
 {
