@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaService implements MediaServiceInterface
 {
-    public function __construct(protected Guard $auth) {}
+    public function __construct(protected Guard $auth)
+    {
+    }
 
     /**
      * Get all media for the authenticated user.

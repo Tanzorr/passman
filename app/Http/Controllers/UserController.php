@@ -16,8 +16,7 @@ class UserController extends Controller
 {
     public function __construct(
         private SharedAccessService $sharedAccessService,
-    ) {
-    }
+    ) {}
 
     public function index(GetUsersAction $getUsersAction): JsonResponse
     {
@@ -47,7 +46,7 @@ class UserController extends Controller
 
     public function destroy(User $user): JsonResponse
     {
-        return $user->delete() ? response()->json(null, 200) : response()->json(null, 404);
+        return response()->json(null, $user->delete() ? 200 : 404);
     }
 
     public function getNotAccessedUsers(

@@ -2,16 +2,16 @@
 
 namespace App\Actions;
 
-use App\Contracts\GatActionInterface;
+use App\Contracts\ReadActionInterface;
 use App\Contracts\QueryInterface;
 use App\Models\User;
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 
-class GetUsersAction implements GatActionInterface
+class GetUsersAction implements ReadActionInterface
 {
-    public function handle(QueryInterface| ValidatesWhenResolved $query): mixed
+    public function handle(QueryInterface $query): mixed
     {
-        return User::filterBySearch($query->getParameter('search'))
+        return User::filterBySearch($query->get('search'))
             ->orderBy('created_at', 'desc')
             ->paginate();
     }

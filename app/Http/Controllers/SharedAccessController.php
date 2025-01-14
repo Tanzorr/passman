@@ -18,7 +18,7 @@ class SharedAccessController extends Controller
 
     public function store(StoreSharedAccessRequest $request, StoreSharedAccessAction $sharedAccessAction): JsonResponse
     {
-        return response()->json($sharedAccessAction->handle($request), 201);
+        return response()->json($sharedAccessAction->handle($request->all()), 201);
     }
 
     public function update(
@@ -26,13 +26,11 @@ class SharedAccessController extends Controller
         UpdateSharedAccessRequest $request,
         UpdateSharedAccessAction $sharedAccessAction
     ): JsonResponse {
-        return response()->json($sharedAccessAction->handle($request, $id), 200);
+        return response()->json($sharedAccessAction->handle(['attributes' => $request->all(), 'id' => $id]), 200);
     }
 
-    public function destroy(string $id): JsonResponse
+    public function destroy(SharedAccess $sharedAccess): JsonResponse
     {
-        SharedAccess::destroy($id);
-
-        return response()->json(null, 200);
+        return response()->json(null, $sharedAccess->delete() ? 200 : 404);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Media;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DetachMediaRequest extends FormRequest
@@ -11,7 +12,9 @@ class DetachMediaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $media = Media::find($this->input('media_id'));
+
+        return $media && $media->user_id === auth()->id();
     }
 
     /**

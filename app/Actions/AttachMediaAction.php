@@ -3,11 +3,13 @@
 namespace App\Actions;
 
 use App\Contracts\MediaServiceInterface;
+use App\Contracts\QueryInterface;
+use App\Contracts\ReadActionInterface;
 use App\Traits\ResolvesEntities;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
-class AttachMediaAction
+class AttachMediaAction implements ReadActionInterface
 {
     use ResolvesEntities;
 
@@ -15,12 +17,12 @@ class AttachMediaAction
     {
     }
 
-    public function execute(array $validated): JsonResponse
+    public function handle(QueryInterface $query): JsonResponse
     {
         try {
-            $entity = $this->resolveEntity($validated['mediable_type'], $validated['mediable_id']);
+            $entity = $this->resolveEntity($query->get('mediable_type'), $query->get('mediable_id'));
 
-            $this->mediaService->attachMediaToEntity($entity, $validated['media_id']);
+            $this->mediaService->attachMediaToEntity($entity, $query->get('media_id'));
 
             return response()->json(['message' => 'Media attached successfully.'], 200);
         } catch (ModelNotFoundException $e) {

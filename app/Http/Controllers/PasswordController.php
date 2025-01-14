@@ -36,8 +36,6 @@ class PasswordController extends Controller
 
     public function destroy(Password $password): JsonResponse
     {
-        $password->delete();
-
-        return response()->json(['message' => 'Password deleted successfully']);
+        return response()->json(null, $password->delete() ? 200 : 404);
     }
 }

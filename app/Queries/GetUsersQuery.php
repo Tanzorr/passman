@@ -12,7 +12,7 @@ class GetUsersQuery implements QueryInterface
         $this->parameters = $parameters;
     }
 
-    public function getParameter(string $key): mixed
+    public function get(string $key): mixed
     {
         return $this->parameters[$key] ?? null;
     }
