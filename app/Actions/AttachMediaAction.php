@@ -3,22 +3,19 @@
 namespace App\Actions;
 
 use App\Contracts\MediaServiceInterface;
-use App\Contracts\QueryInterface;
-use App\Contracts\ReadActionInterface;
+use App\Contracts\MutationActionInterface;
 use App\Traits\ResolvesEntities;
 
-class AttachMediaAction implements ReadActionInterface
+class AttachMediaAction implements MutationActionInterface
 {
     use ResolvesEntities;
 
-    public function __construct(private MediaServiceInterface $mediaService)
-    {
-    }
+    public function __construct(private MediaServiceInterface $mediaService) {}
 
-    public function handle(QueryInterface $query): mixed
+    public function handle(array $data): mixed
     {
-        $entity = $this->resolveEntity($query->get('mediable_type'), $query->get('mediable_id'));
-        $this->mediaService->attachMediaToEntity($entity, $query->get('media_id'));
+        $entity = $this->resolveEntity($data['mediable_type'], $data['mediable_id']);
+        $this->mediaService->attachMediaToEntity($entity, $data['media_id']);
 
         return $entity;
     }

@@ -3,11 +3,12 @@
 namespace App\Actions;
 
 use App\Contracts\MediaServiceInterface;
+use App\Contracts\MutationActionInterface;
 use App\Traits\ResolvesEntities;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
-class DetachMediaAction
+class DetachMediaAction implements MutationActionInterface
 {
     use ResolvesEntities;
 

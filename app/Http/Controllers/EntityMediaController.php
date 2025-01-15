@@ -20,7 +20,7 @@ class EntityMediaController extends Controller
     public function attach(AttachMediaRequest $request): JsonResponse
     {
         try {
-            $attachedEntity = $this->attachMediaAction->handle(new GetQuery($request->validated()));
+            $attachedEntity = $this->attachMediaAction->handle($request->validated());
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 400);
         }
