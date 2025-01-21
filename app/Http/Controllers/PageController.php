@@ -42,7 +42,7 @@ class PageController extends Controller
 
         return response()->json([
             'message' => 'Page updated successfully',
-            'user' => $page->update($validated->all()), 200,
+            'user' => $page->update($validated), 200,
         ]);
     }
 
