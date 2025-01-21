@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EntityMediaController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\SharedAccessController;
 use App\Http\Controllers\UserController;
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('attach', [EntityMediaController::class, 'attach']);
         Route::post('detach', [EntityMediaController::class, 'detach']);
     });
+    Route::apiResource('pages', PageController::class);
 });
 
 Route::get('/csrf-token', function () {
