@@ -85,6 +85,42 @@ use App\Http\Controllers\Controller;
  *   )
  *
  * @OA\Tag(
+ *     name="Page",
+ *     description="Operations related to page management"
+ * )
+ *
+ * @OA\Schema(
+ *     schema="UpadtePageRequest",
+ *     type="object",
+ *
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="author_id", type="integer", example=1),
+ *     @OA\Property(property="title", type="string", example="Page title"),
+ *     @OA\Property(property="content", type="string", example="Page content"),
+ *     )
+ *
+ * @OA\Schema(
+ *     schema="StorePageRequest",
+ *     type="object",
+ *
+ *     @OA\Property(property="author_id", type="integer", example=1),
+ *     @OA\Property(property="title", type="string", example="Page title"),
+ *     @OA\Property(property="content", type="string", example="Page content"),
+ *     )
+ *
+ * @OA\Schema(
+ *     schema="Page",
+ *     type="object",
+ *     required={"id", "author_id", "title", "content", "created_at", "updated_at"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="author_id", type="integer", example=1),
+ *     @OA\Property(property="title", type="string", example="Page title"),
+ *     @OA\Property(property="content", type="string", example="Page content"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-01T12:00:00Z"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-01T12:30:00Z")
+ * )
+ *
+ * @OA\Tag(
  *     name="Passwords",
  *     description="API Endpoints for managing passwords"
  * )
