@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePageRequest;
+use App\Http\Requests\UpdatePageRequest;
 use App\Models\Page;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StorePageRequest $request): JsonResponse
     {
+        $validated = $request->validated();
+
         return response()->json([
             'message' => 'Page created successfully',
             'user' => Page::create(array_merge(
-                $request->all(),
+                $validated->all(),
                 ['author_id' => auth()->id()]
             )),
         ], 201);
@@ -33,11 +36,13 @@ class PageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Page $page): JsonResponse
+    public function update(UpdatePageRequest $request, Page $page): JsonResponse
     {
+        $validated = $request->validated();
+
         return response()->json([
             'message' => 'Page updated successfully',
-            'user' => $page->update($request->all()), 200,
+            'user' => $page->update($validated->all()), 200,
         ]);
     }
 
