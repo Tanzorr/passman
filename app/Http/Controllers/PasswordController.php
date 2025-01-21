@@ -12,21 +12,19 @@ use Knuckles\Scribe\Attributes\Endpoint;
 
 class PasswordController extends Controller
 {
-    public function index(Vault $vault): Collection
+    public function index(): JsonResponse
     {
-        return Password::where('vault_id', $vault->id)->get();
+        return response()->json(Password::paginate(20));
     }
 
     public function store(StorePasswordRequest $request): JsonResponse
     {
-        Password::create($request->validated());
-
-        return response()->json(['message' => 'Password created successfully']);
+        return response()->json(Password::create($request->validated()));
     }
 
-    public function show(Password $password): Password
+    public function show(Password $password): JsonResponse
     {
-        return $password;
+        return response()->json($password);
     }
 
     public function update(UpdatePasswordRequest $request, Password $password): JsonResponse
