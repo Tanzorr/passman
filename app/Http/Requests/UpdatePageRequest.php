@@ -11,7 +11,7 @@ class UpdatePageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->id === $this->author_id;
+        return auth()->id() === $this->user()->id;
     }
 
     /**
