@@ -317,6 +317,178 @@
                 ]
             }
         },
+        "/api/pages": {
+            "post": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Create a new page",
+                "operationId": "createPage",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StorePageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Page created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "author_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Page title"
+                                        },
+                                        "content": {
+                                            "type": "string",
+                                            "example": "Page content"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input data"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pages/{pageId}": {
+            "get": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Get a page by ID",
+                "operationId": "getPage",
+                "parameters": [
+                    {
+                        "name": "pageId",
+                        "in": "path",
+                        "description": "ID of the page to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Page details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Page"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Update a page",
+                "operationId": "updatePage",
+                "parameters": [
+                    {
+                        "name": "pageId",
+                        "in": "path",
+                        "description": "ID of the page to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpadtePageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Page updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Delete a page",
+                "operationId": "deletePage",
+                "parameters": [
+                    {
+                        "name": "pageId",
+                        "in": "path",
+                        "description": "ID of the page to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Page deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/passwords": {
             "get": {
                 "tags": [
@@ -1241,6 +1413,83 @@
                 },
                 "type": "object"
             },
+            "UpadtePageRequest": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "author_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Page title"
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "Page content"
+                    }
+                },
+                "type": "object"
+            },
+            "StorePageRequest": {
+                "properties": {
+                    "author_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Page title"
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "Page content"
+                    }
+                },
+                "type": "object"
+            },
+            "Page": {
+                "required": [
+                    "id",
+                    "author_id",
+                    "title",
+                    "content",
+                    "created_at",
+                    "updated_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "author_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Page title"
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "Page content"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T12:30:00Z"
+                    }
+                },
+                "type": "object"
+            },
             "Password": {
                 "properties": {
                     "id": {
@@ -1500,6 +1749,10 @@
         {
             "name": "Vault",
             "description": "Operations related to vault management"
+        },
+        {
+            "name": "Page",
+            "description": "Operations related to page management"
         },
         {
             "name": "Passwords",

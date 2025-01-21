@@ -19,7 +19,7 @@ class PageController extends Controller
         return response()->json([
             'message' => 'Page created successfully',
             'user' => Page::create(array_merge(
-                $validated->all(),
+                $validated,
                 ['author_id' => auth()->id()]
             )),
         ], 201);
