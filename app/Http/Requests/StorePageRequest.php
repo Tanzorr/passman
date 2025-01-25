@@ -25,7 +25,6 @@ class StorePageRequest extends FormRequest
         return [
             'title' => 'required | min:5',
             'content' => 'required',
-            'author_id' => 'required | exists:users,id',
         ];
     }
 }
