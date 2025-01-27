@@ -318,6 +318,33 @@
             }
         },
         "/api/pages": {
+            "get": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Get all pages",
+                "operationId": "c9a42b2888b677daaa6a6b9ac4ab0def",
+                "responses": {
+                    "200": {
+                        "description": "List of pages",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Page"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Page"

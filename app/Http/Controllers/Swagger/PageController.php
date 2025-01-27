@@ -5,6 +5,26 @@ namespace App\Http\Controllers\Swagger;
 class PageController
 {
     /**
+     * @OA\Get(
+     *     path="/api/pages",
+     *     summary="Get all pages",
+     *     tags={"Page"},
+     *     security={{"bearerAuth": {}}},
+     *      @OA\Response(
+     *      response=200,
+     *      description="List of pages",
+     *       @OA\JsonContent(
+     *       type="array",
+     *         @OA\Items(ref="#/components/schemas/Page")
+     *      )
+     *    )
+     *  )
+     */
+    public function index()
+    {
+    }
+
+    /**
      * @OA\Post(
      *     path="/api/pages",
      *     summary="Create a new page",
@@ -43,7 +63,9 @@ class PageController
      *     )
      * )
      */
-    public function store() {}
+    public function store()
+    {
+    }
 
     /**
      * @OA\Get(
@@ -70,7 +92,9 @@ class PageController
      *    ),
      * )
      */
-    public function show() {}
+    public function show()
+    {
+    }
 
     /**
      * @OA\Put(
@@ -102,7 +126,9 @@ class PageController
      *     )
      * )
      */
-    public function update() {}
+    public function update()
+    {
+    }
 
     /**
      * @OA\Delete(
@@ -127,5 +153,7 @@ class PageController
      *     )
      * )
      */
-    public function destroy() {}
+    public function destroy()
+    {
+    }
 }
