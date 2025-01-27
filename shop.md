@@ -1,0 +1,34 @@
+### Extra quest
+- [ ] Entities
+    - [ ] User entity
+    - [ ] Order entity
+        - [ ] order statuses and transitions (later)
+    - [ ] Order item entity
+    - [ ] Product entity
+- [ ] Relations
+- [ ] Import of products
+- [ ] Aggrrgations
+    - [ ] by price
+    - [ ] by amount
+    - [ ] amount by period
+    - [ ] by product per period
+- [ ] Search:
+    - [ ] by product
+        - [ ] description
+        - [ ] tags
+        - [ ] characteristics
+    - [ ] by user
+- [ ] Export of products
+- [ ] Export of orders
+
+### to handle
+- transactions
+    - table lock (myisam (no transitions, full table lock) vs innodb)
+    - deadlock
+- indexes
+    - composite indexes
+    - foreign indexes (modes)
+- replication
+- views
+- partitions
+- full text search

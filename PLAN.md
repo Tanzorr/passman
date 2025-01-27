@@ -69,11 +69,23 @@ Ex:
 
 - [ ] Step 8. Infrastructure
     - [ ] Github CI/CD
+        - [ ] setup minimal machine on AWS (EC2 instance from free tier)
+        - [ ] write a github deploy pipeline that will:
+            - build
+                - [ ] install php dependencies
+                - [ ] cache:warmup
+                - [ ] set env variables 
+                - [ ] compress and send to S3 (aws-cli)
+            - deploy
+                - [ ] copy from S3 to EC2 instance and unpack (aws-cli)
+                - [ ] start docker containers on EC2 machine (aws cli)
+        - [ ] CI/CD for front
     - [ ] Deployment to AWS
     - [ ] infrastructure with terraform
 
 - [ ] Step 8. To be discussed
     - [ ] Push notifications
+
 ### Stuff I would like to learn
  - [ ] Configre CI/CD on github (on PR run tests, code quality check)
  - [ ] configure xdebuger with docker
@@ -89,3 +101,33 @@ Ex:
     - [ ] Parameter Store
     - [ ] CodeBuild + CodePipeline
     - [ ] Fargate
+
+
+### Tech debt approaches
+- [ ] interfaces
+- [ ] packages
+- [ ] BC
+- [ ] ...
+
+### Extra quest
+- [ ] Entities
+    - [ ] Order entity
+    - [ ] Order item entity
+    - [ ] Product entity
+- [ ] Relations
+- [ ] Aggrrgations
+    - [ ] by price
+    - [ ] by amount
+    - [ ] amount by period
+    - [ ] by product per period
+- [ ] Search:
+    - [ ] by product
+    - [ ] by user
+- [ ] Import of products
+- [ ] Export of products
+
+
+
+
+
+
