@@ -42,7 +42,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $appends = ['ownVaults',  'media'];
+    protected $appends = ['ownVaults', 'sharedVaults', 'media',];
 
     public function scopeFilterBySearch(Builder $query, $search = ''): Builder
     {
