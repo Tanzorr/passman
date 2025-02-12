@@ -69,16 +69,18 @@ Ex:
 
 - [ ] Step 8. Infrastructure
     - [ ] Github CI/CD
-        - [ ] setup minimal machine on AWS (EC2 instance from free tier)
-        - [ ] write a github deploy pipeline that will:
-            - build
-                - [ ] install php dependencies
+        - [x] setup minimal machine on AWS (EC2 instance from free tier)
+        - [x] write a github deploy pipeline that will:
+            - [!!!!] fetch secrets like IP to EC2 machine from Parameter Store (aws ssm)
+            - [ ] prebuild 
+                - [ ] install php dependencies (composer)
                 - [ ] cache:warmup
-                - [ ] set env variables 
-                - [ ] compress and send to S3 (aws-cli)
-            - deploy
-                - [ ] copy from S3 to EC2 instance and unpack (aws-cli)
-                - [ ] start docker containers on EC2 machine (aws cli)
+                - [ ] set env variables (use sqlite)
+            - [ ] build
+                - [ ] docker build (use ECR commands)
+                - [ ] docker push to ecr (same ecr commands)
+            - deploy (might encounter some problems, call me)
+                - [ ] execute command on EC2 (docker pull <image url> && docker run -p 80:8000 <image name>)
         - [ ] CI/CD for front
     - [ ] Deployment to AWS
     - [ ] infrastructure with terraform

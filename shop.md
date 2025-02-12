@@ -1,14 +1,14 @@
 ### Extra quest
-- [ ] Entities
-    - [ ] User entity
-    - [ ] Order entity
+- [x] Entities
+    - [x] User entity
+    - [x] Order entity
         - [ ] order statuses and transitions (later)
-    - [ ] Order item entity
-    - [ ] Product entity
-- [ ] Relations
-- [ ] Import of products
+    - [x] Order item entity
+    - [x] Product entity
+- [x] Relations
+- [ ] Import of products (create command for import, import A LOT of data, csv and xml)
 - [ ] Aggrrgations
-    - [ ] by price
+    - [ ] by price (generate a report of most popular product for last quarter per month (3 last months), group by price ranges (0-1000, 1000-3000, 3000-inf))
     - [ ] by amount
     - [ ] amount by period
     - [ ] by product per period
@@ -18,6 +18,7 @@
         - [ ] tags
         - [ ] characteristics
     - [ ] by user
+- [ ] Queues and workers
 - [ ] Export of products
 - [ ] Export of orders
 
