@@ -68,10 +68,10 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    environment: production
+  # deploy:
+  #   name: Deploy
+  #   runs-on: ubuntu-latest
+  #   environment: production
 
     # TODO: add docker pull and docker run on EC2 instance
     # - name: Deploy Amazon ECS task definition
